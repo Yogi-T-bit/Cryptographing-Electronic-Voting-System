@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CryptographingElectronicVotingSystem.Dal.Data;
+using CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using CryptographingElectronicVotingSystem.Service.Services;
+using CryptographingElectronicVotingSystem.Web.Services;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using CryptographingElectronicVotingSystem.Web.Services;
 
 namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 {
@@ -41,6 +45,43 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 
             candidatesForCandidateID = await ElectronicVotingSystemService.Getcandidates();
         }
+        [Inject]
+        public FakeDataGenerator DataGenerator { get; set; }
+        
+        protected async Task GenerateVotes()
+        {
+            try
+            {
+                // Assuming GetCandidates and GetVoters return IQueryable
+                var candidates = await ElectronicVotingSystemService.Getcandidates();
+                var voters = await ElectronicVotingSystemService.Getvoters();
+                
+                List<candidate> candidateList = candidates.ToList();
+                List<voter> votersList = voters.ToList();
+
+                // Now candidates and voters are List<T> which can be passed to GenerateVotes
+                var votes = DataGenerator.GenerateVotes(100, candidateList, votersList);
+                foreach (var vote in votes)
+                {
+                    await ElectronicVotingSystemService.Createvote(vote);
+                }
+
+                // Notify user about success
+                NotificationService.Notify(NotificationSeverity.Success, "Votes Generated", $"{votes.Count} fake votes have been successfully generated and saved.", 5000);
+
+                // Optionally, refresh the UI or redirect
+                await InvokeAsync(StateHasChanged);
+                DialogService.Close(null); // Assuming you want to close a dialog or similar
+            }
+            catch (Exception ex)
+            {
+                hasChanges = ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException;
+                canEdit = !(ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException);
+                errorVisible = true;
+            }
+        }
+
+
         protected bool errorVisible;
         protected CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote vote;
 
@@ -71,5 +112,8 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 
         protected bool hasChanges = false;
         protected bool canEdit = true;
+
+        [Inject]
+        protected SecurityService Security { get; set; }
     }
 }

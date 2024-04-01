@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using Radzen;
 using Radzen.Blazor;
+using CryptographingElectronicVotingSystem.Web.Services;
 
 namespace CryptographingElectronicVotingSystem.Web.Components.Layout
 {
@@ -33,10 +34,44 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Layout
         protected NotificationService NotificationService { get; set; }
 
         private bool sidebarExpanded = true;
+        private bool sidebarVisible = true;
+
+        [Inject]
+        protected SecurityService Security { get; set; }
 
         void SidebarToggleClick()
         {
             sidebarExpanded = !sidebarExpanded;
+        }
+        
+        protected override void OnInitialized()
+        {
+            UpdateSidebarVisibility();
+            NavigationManager.LocationChanged += HandleLocationChanged;
+        }
+
+        private void UpdateSidebarVisibility()
+        {
+            // Hide the sidebar on the login page
+            sidebarVisible = !NavigationManager.Uri.Contains("/login");
+        }
+
+        private void HandleLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+        {
+            UpdateSidebarVisibility();
+        }
+
+        public void Dispose()
+        {
+            NavigationManager.LocationChanged -= HandleLocationChanged;
+        }
+
+        protected void ProfileMenuClick(RadzenProfileMenuItem args)
+        {
+            if (args.Value == "Logout")
+            {
+                Security.Logout();
+            }
         }
     }
 }

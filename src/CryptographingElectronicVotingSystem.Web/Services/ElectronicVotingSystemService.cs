@@ -11,7 +11,7 @@ using Radzen;
 
 using CryptographingElectronicVotingSystem.Dal.Data;
 
-namespace CryptographingElectronicVotingSystem.Service.Services
+namespace CryptographingElectronicVotingSystem.Web.Services
 {
     public partial class ElectronicVotingSystemService
     {
@@ -523,7 +523,7 @@ namespace CryptographingElectronicVotingSystem.Service.Services
         partial void OnvoterDeleted(CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter item);
         partial void OnAftervoterDeleted(CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter item);
 
-        public async Task<CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter> Deletevoter(int voterid)
+        public async Task<CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter> Deletevoter(long voterid)
         {
             var itemToDelete = Context.voters
                               .Where(i => i.VoterID == voterid)

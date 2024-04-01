@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 using CryptographingElectronicVotingSystem.Dal.Data;
-using CryptographingElectronicVotingSystem.Service.Services;
+using CryptographingElectronicVotingSystem.Web.Services;
 
 namespace CryptographingElectronicVotingSystem.Web.Controllers
 {

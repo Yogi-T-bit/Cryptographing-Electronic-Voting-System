@@ -1,4 +1,5 @@
-@page "/add-voter"
+@page "/add-voter"
+@attribute [Authorize]
 
 <PageTitle>Add voter</PageTitle>
     <RadzenColumn SizeMD=12>
@@ -46,10 +47,11 @@
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@voter.VoterPublicKey" Name="VoterPublicKey" />
                 </RadzenColumn>
             </RadzenRow>
-          <RadzenStack  Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
-                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
-                    <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick"  />
-          </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add" Text="Generate Fake Candidates" Click="@(() => GenerateVoters())" />
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat"/>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick"/>
+            </RadzenStack>
         </RadzenTemplateForm>
     </RadzenColumn>
 

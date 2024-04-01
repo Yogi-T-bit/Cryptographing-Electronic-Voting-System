@@ -1,6 +1,13 @@
+using CryptographingElectronicVotingSystem.Dal.Data;
 using Radzen;
 using CryptographingElectronicVotingSystem.Web.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using CryptographingElectronicVotingSystem.Dal.Models.Authentication;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
+using Microsoft.AspNetCore.Components.Authorization;
+using CryptographingElectronicVotingSystem.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -8,11 +15,40 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents().AddHubOpt
 builder.Services.AddControllers();
 builder.Services.AddRadzenComponents();
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<CryptographingElectronicVotingSystem.Service.Services.ElectronicVotingSystemService>();
-builder.Services.AddDbContext<CryptographingElectronicVotingSystem.Dal.Data.ElectronicVotingSystemContext>(options =>
+
+builder.Services.AddScoped<ElectronicVotingSystemService>();
+builder.Services.AddDbContext<ElectronicVotingSystemContext>(options =>
 {
-   options.UseMySql(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection")));
+    options.UseMySql(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection")));
 });
+
+builder.Services.AddScoped<FakeDataGenerator>();
+
+builder.Services.AddHttpClient("CryptographingElectronicVotingSystem.Web").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false }).AddHeaderPropagation(o => o.Headers.Add("Cookie"));
+builder.Services.AddHeaderPropagation(o => o.Headers.Add("Cookie"));
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<SecurityService>();
+builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+{
+    options.UseMySql(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection")));
+});
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationIdentityDbContext>().AddDefaultTokenProviders();
+builder.Services.AddTransient<IUserStore<ApplicationUser>, MultiTenancyUserStore>();
+builder.Services.AddControllers().AddOData(o =>
+{
+    var oDataBuilder = new ODataConventionModelBuilder();
+    oDataBuilder.EntitySet<ApplicationUser>("ApplicationUsers");
+    var usersType = oDataBuilder.StructuralTypes.First(x => x.ClrType == typeof(ApplicationUser));
+    usersType.AddProperty(typeof(ApplicationUser).GetProperty(nameof(ApplicationUser.Password)));
+    usersType.AddProperty(typeof(ApplicationUser).GetProperty(nameof(ApplicationUser.ConfirmPassword)));
+    oDataBuilder.EntitySet<ApplicationRole>("ApplicationRoles");
+    oDataBuilder.EntitySet<ApplicationTenant>("ApplicationTenants");
+    o.AddRouteComponents("odata/Identity", oDataBuilder.GetEdmModel()).Count().Filter().OrderBy().Expand().Select().SetMaxTop(null).TimeZone = TimeZoneInfo.Utc;
+});
+builder.Services.AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>();
+
+
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -25,7 +61,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseHeaderPropagation();
 app.UseStaticFiles();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.Services.CreateScope().ServiceProvider.GetRequiredService<ElectronicVotingSystemContext>().Database.Migrate();
+app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>().Database.Migrate();
+app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationIdentityDbContext>().SeedTenantsAdmin().Wait();
 app.Run();

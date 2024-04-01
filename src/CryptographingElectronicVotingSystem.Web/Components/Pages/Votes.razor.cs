@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using CryptographingElectronicVotingSystem.Service.Services;
+using CryptographingElectronicVotingSystem.Web.Services;
 
 namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 {
@@ -39,6 +39,9 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Pages
         protected RadzenDataGrid<CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote> grid0;
 
         protected string search = "";
+
+        [Inject]
+        protected SecurityService Security { get; set; }
 
         protected async Task Search(ChangeEventArgs args)
         {

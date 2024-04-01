@@ -12,7 +12,7 @@ namespace CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VoteID { get; set; }
 
-        public int? VoterID { get; set; }
+        public long? VoterID { get; set; }
 
         public voter voter { get; set; }
 

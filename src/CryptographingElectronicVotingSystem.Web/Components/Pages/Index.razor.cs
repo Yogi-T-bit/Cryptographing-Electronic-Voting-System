@@ -1,4 +1,5 @@
 using System.Net.Http;
+using CryptographingElectronicVotingSystem.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -10,7 +11,7 @@ using Microsoft.JSInterop;
 using Radzen;
 using Radzen.Blazor;
 
-namespace CryptographingElectronicVotingSystem.Components.Pages
+namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 {
     public partial class Index
     {
@@ -31,5 +32,8 @@ namespace CryptographingElectronicVotingSystem.Components.Pages
 
         [Inject]
         protected NotificationService NotificationService { get; set; }
+
+        [Inject]
+        protected SecurityService Security { get; set; }
     }
 }

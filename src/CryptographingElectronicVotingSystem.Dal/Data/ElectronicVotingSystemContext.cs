@@ -3,7 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
-
+using CryptographingElectronicVotingSystem.Dal.Models.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CryptographingElectronicVotingSystem.Dal.Data
 {
@@ -53,12 +55,14 @@ namespace CryptographingElectronicVotingSystem.Dal.Data
 
             builder.Entity<CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.votetally>()
               .Property(p => p.VoteCount)
-              .HasDefaultValueSql(@"'0'");     
+              .HasDefaultValueSql(@"'0'");
 
             builder.Entity<CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote>()
               .Property(p => p.Timestamp)
               .HasColumnType("datetime");
+            
             this.OnModelBuilding(builder);
+            
         }
 
         public DbSet<CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate> candidates { get; set; }

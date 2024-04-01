@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using CryptographingElectronicVotingSystem.Service.Services;
+using CryptographingElectronicVotingSystem.Web.Services;
 
 namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 {
@@ -66,6 +66,9 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 
         protected bool hasChanges = false;
         protected bool canEdit = true;
+
+        [Inject]
+        protected SecurityService Security { get; set; }
 
 
         protected async Task ReloadButtonClick(MouseEventArgs args)

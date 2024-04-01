@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CryptographingElectronicVotingSystem.Dal.Data;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using CryptographingElectronicVotingSystem.Service.Services;
-
+using CryptographingElectronicVotingSystem.Web.Services;
 namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 {
     public partial class AddCandidate
@@ -37,6 +37,37 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Pages
         {
             candidate = new CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate();
         }
+        [Inject]
+        public FakeDataGenerator DataGenerator { get; set; }
+        
+        protected async Task GenerateCandidates()
+        {
+            try
+            {
+                var candidates = DataGenerator.GenerateCandidates(10);
+                foreach (var candidate in candidates)
+                {
+                    await ElectronicVotingSystemService.Createcandidate(candidate);
+                }
+
+                // Notify user about success
+                NotificationService.Notify(NotificationSeverity.Success, "Candidates Generated", $"{candidates.Count} fake candidates have been successfully generated and saved.", 5000);
+
+                // Optionally, refresh the UI or redirect
+                await InvokeAsync(StateHasChanged);
+                DialogService.Close(candidate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+
+                // Update UI to reflect the error
+                errorVisible = true;
+
+                // Notify user about the error
+                NotificationService.Notify(NotificationSeverity.Error, "Error Generating Candidates", "There was an error generating the candidates. Please try again.", 7000);
+            }
+        }
         protected bool errorVisible;
         protected CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate candidate;
 
@@ -63,5 +94,8 @@ namespace CryptographingElectronicVotingSystem.Web.Components.Pages
 
         protected bool hasChanges = false;
         protected bool canEdit = true;
+
+        [Inject]
+        protected SecurityService Security { get; set; }
     }
 }

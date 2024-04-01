@@ -9,8 +9,8 @@ namespace CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
     public partial class voter
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int VoterID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)] // Changed from Identity to None
+        public long VoterID { get; set; }
 
         [Required]
         public string FullName { get; set; }
