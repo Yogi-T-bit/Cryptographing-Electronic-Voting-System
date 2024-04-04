@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CryptographingElectronicVotingSystem.Dal.Models.Authentication;
 
 namespace CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
 {
@@ -25,6 +26,13 @@ namespace CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
         public string VoterPublicKey { get; set; }
 
         public ICollection<vote> votes { get; set; }
+        
+        // Add a foreign key property for ApplicationUser
+        public string ApplicationUserId { get; set; }
+
+        // Navigation property to ApplicationUser
+        [ForeignKey("ApplicationUserId")]
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
     }
 }

@@ -25,6 +25,12 @@ namespace CryptographingElectronicVotingSystem.Dal.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
+            // Configure the one-to-one relationship between ApplicationUser and Voter
+            builder.Entity<ApplicationUser>()
+                .HasOne(u => u.Voter) // ApplicationUser has one Voter
+                .WithOne() // Assuming no navigation property back from Voter to ApplicationUser
+                .HasForeignKey<ApplicationUser>(u => u.VoterId); // Applic
 
             builder.Entity<ApplicationUser>()
                    .HasMany(u => u.Roles)

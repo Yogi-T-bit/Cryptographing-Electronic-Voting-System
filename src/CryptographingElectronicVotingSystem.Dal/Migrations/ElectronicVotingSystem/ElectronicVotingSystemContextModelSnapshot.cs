@@ -19,6 +19,142 @@ namespace CryptographingElectronicVotingSystem.Dal.Migrations.ElectronicVotingSy
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ApplicationRoleApplicationUser", b =>
+                {
+                    b.Property<string>("RolesId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ApplicationRoleApplicationUser", t =>
+                        {
+                            t.HasTrigger("ApplicationRoleApplicationUser_Trigger");
+                        });
+                });
+
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("AspNetRoles", t =>
+                        {
+                            t.HasTrigger("AspNetRoles_Trigger");
+                        });
+                });
+
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationTenant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Hosts")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AspNetTenants", t =>
+                        {
+                            t.HasTrigger("AspNetTenants_Trigger");
+                        });
+                });
+
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("VoterID")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("VoterId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("VoterID");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.HasTrigger("AspNetUsers_Trigger");
+                        });
+                });
+
             modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", b =>
                 {
                     b.Property<int>("CandidateID")
@@ -104,6 +240,10 @@ namespace CryptographingElectronicVotingSystem.Dal.Migrations.ElectronicVotingSy
                     b.Property<long>("VoterID")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -123,6 +263,9 @@ namespace CryptographingElectronicVotingSystem.Dal.Migrations.ElectronicVotingSy
                         .HasColumnType("longtext");
 
                     b.HasKey("VoterID");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
 
                     b.ToTable("voters", t =>
                         {
@@ -159,6 +302,47 @@ namespace CryptographingElectronicVotingSystem.Dal.Migrations.ElectronicVotingSy
                         });
                 });
 
+            modelBuilder.Entity("ApplicationRoleApplicationUser", b =>
+                {
+                    b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", b =>
+                {
+                    b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationTenant", "ApplicationTenant")
+                        .WithMany("Roles")
+                        .HasForeignKey("TenantId");
+
+                    b.Navigation("ApplicationTenant");
+                });
+
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+                {
+                    b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationTenant", "ApplicationTenant")
+                        .WithMany("Users")
+                        .HasForeignKey("TenantId");
+
+                    b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", "Voter")
+                        .WithMany()
+                        .HasForeignKey("VoterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationTenant");
+
+                    b.Navigation("Voter");
+                });
+
             modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote", b =>
                 {
                     b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", "candidate")
@@ -174,6 +358,17 @@ namespace CryptographingElectronicVotingSystem.Dal.Migrations.ElectronicVotingSy
                     b.Navigation("voter");
                 });
 
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", b =>
+                {
+                    b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", "ApplicationUser")
+                        .WithOne()
+                        .HasForeignKey("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.votetally", b =>
                 {
                     b.HasOne("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", "candidate")
@@ -187,6 +382,13 @@ namespace CryptographingElectronicVotingSystem.Dal.Migrations.ElectronicVotingSy
                     b.Navigation("candidate");
 
                     b.Navigation("tallyingcenter");
+                });
+
+            modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.Authentication.ApplicationTenant", b =>
+                {
+                    b.Navigation("Roles");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("CryptographingElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", b =>

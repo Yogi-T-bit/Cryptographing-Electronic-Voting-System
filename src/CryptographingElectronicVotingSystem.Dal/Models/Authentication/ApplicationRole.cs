@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CryptographingElectronicVotingSystem.Dal.Models.Authentication
 {
+    [Table("AspNetRoles")]
     public partial class ApplicationRole : IdentityRole
     {
         [JsonIgnore]
