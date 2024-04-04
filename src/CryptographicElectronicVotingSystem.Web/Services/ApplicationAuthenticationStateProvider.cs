@@ -29,7 +29,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
 
                 if (state.IsAuthenticated)
                 {
-                    identity = new ClaimsIdentity(state.Claims.Select(c => new Claim(c.Type, c.Value)), "CryptographingElectronicVotingSystem.Web");
+                    identity = new ClaimsIdentity(state.Claims.Select(c => new Claim(c.Type, c.Value)), "CryptographicElectronicVotingSystem.Web");
                 }
             }
             catch (HttpRequestException ex)

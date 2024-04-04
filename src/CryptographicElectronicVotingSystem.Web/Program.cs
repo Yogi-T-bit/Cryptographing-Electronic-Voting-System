@@ -24,7 +24,7 @@ builder.Services.AddDbContext<ElectronicVotingSystemContext>(options =>
 
 builder.Services.AddScoped<FakeDataGenerator>();
 
-builder.Services.AddHttpClient("CryptographingElectronicVotingSystem.Web").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false }).AddHeaderPropagation(o => o.Headers.Add("Cookie"));
+builder.Services.AddHttpClient("CryptographicElectronicVotingSystem.Web").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false }).AddHeaderPropagation(o => o.Headers.Add("Cookie"));
 builder.Services.AddHeaderPropagation(o => o.Headers.Add("Cookie"));
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();

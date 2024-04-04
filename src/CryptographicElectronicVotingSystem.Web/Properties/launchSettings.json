@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "CryptographingElectronicVotingSystem.Server": {
+    "CryptographicElectronicVotingSystem.Server": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
