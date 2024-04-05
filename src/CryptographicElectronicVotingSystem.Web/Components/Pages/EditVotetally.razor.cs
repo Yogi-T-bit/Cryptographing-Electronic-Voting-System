@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,31 +31,31 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         [Parameter]
         public int TallyID { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            votetally = await ElectronicVotingSystemService.GetvotetallyByTallyId(TallyID);
+            votetally = await CryptographicElectronicVotingSystemService.GetVotetallyByTallyId(TallyID);
 
-            tallyingcentersForCenterID = await ElectronicVotingSystemService.Gettallyingcenters();
+            tallyingcentersForCenterID = await CryptographicElectronicVotingSystemService.GetTallyingcenters();
 
-            candidatesForCandidateID = await ElectronicVotingSystemService.Getcandidates();
+            candidatesForCandidateID = await CryptographicElectronicVotingSystemService.GetCandidates();
         }
         protected bool errorVisible;
-        protected votetally votetally;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally votetally;
 
-        protected IEnumerable<tallyingcenter> tallyingcentersForCenterID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> tallyingcentersForCenterID;
 
-        protected IEnumerable<candidate> candidatesForCandidateID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> candidatesForCandidateID;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Updatevotetally(TallyID, votetally);
+                await CryptographicElectronicVotingSystemService.UpdateVotetally(TallyID, votetally);
                 DialogService.Close(votetally);
             }
             catch (Exception ex)
@@ -82,11 +81,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected async Task ReloadButtonClick(MouseEventArgs args)
         {
-           ElectronicVotingSystemService.Reset();
+           CryptographicElectronicVotingSystemService.Reset();
             hasChanges = false;
             canEdit = true;
 
-            votetally = await ElectronicVotingSystemService.GetvotetallyByTallyId(TallyID);
+            votetally = await CryptographicElectronicVotingSystemService.GetVotetallyByTallyId(TallyID);
         }
     }
 }

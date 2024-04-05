@@ -2,11 +2,11 @@
 
 @attribute [Authorize]
 
-<PageTitle>voters</PageTitle>
+<PageTitle>Voters</PageTitle>
 <RadzenStack>
     <RadzenRow AlignItems="AlignItems.Center">
         <RadzenColumn Size="12" SizeMD="6">
-            <RadzenText Text="voters" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+            <RadzenText Text="Voters" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="6">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
@@ -22,21 +22,21 @@
     <RadzenRow>
       <RadzenColumn SizeMD=12>
         <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
-            Data="@voters" TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" RowDoubleClick="@EditRow">
+            Data="@voters" TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" RowDoubleClick="@EditRow">
             <Columns>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Property="VoterID" Title="Voter I D">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Property="VoterID" Title="Voter I D">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Property="FullName" Title="Full Name">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Property="FullName" Title="Full Name">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Property="Email" Title="Email">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Property="Email" Title="Email">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Property="IsAuthorized" Title="Is Authorized">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Property="IsAuthorized" Title="Is Authorized">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Property="HasVoted" Title="Has Voted">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Property="HasVoted" Title="Has Voted">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Property="VoterPublicKey" Title="Voter Public Key">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Property="VoterPublicKey" Title="Voter Public Key">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                     <Template Context="voter">
 
                         <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"

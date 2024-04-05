@@ -3,7 +3,7 @@
 
 <RadzenRow>
     <RadzenColumn SizeMD="12">
-        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser" Data="@user" Visible="@(user != null)" Submit="@FormSubmit">
+        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser" Data="@user" Visible="@(user != null)" Submit="@FormSubmit">
             <RadzenAlert Title="Cannot create user" Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">@error</RadzenAlert>
 
             <RadzenStack style="margin-bottom: 1rem;">

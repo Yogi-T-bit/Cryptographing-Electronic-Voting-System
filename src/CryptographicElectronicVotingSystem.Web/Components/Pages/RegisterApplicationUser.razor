@@ -5,7 +5,7 @@
 <PageTitle>Register Application User</PageTitle>
 <RadzenRow>
     <RadzenColumn SizeMD="12">
-        <RadzenTemplateForm Data="@user" TItem="CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser"
+        <RadzenTemplateForm Data="@user" TItem="CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser"
             Visible="@(user != null)" Submit="@FormSubmit">
             <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">@error</RadzenAlert>
 

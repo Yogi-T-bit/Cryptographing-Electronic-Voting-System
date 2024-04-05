@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +10,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
+using CryptographicElectronicVotingSystem.Web.Services;
+
 
 namespace CryptographicElectronicVotingSystem.Web.Controllers
 {
@@ -197,7 +197,7 @@ If you didn't request this code, you can safely ignore this email. Someone else 
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: Request.Scheme);
 
                     var text = $@"Hi, <br /> <br />
-We received your registration request for CryptographicElectronicVotingSystem. <br /> <br />
+We received your registration request for CryptographicElectronicVotingSystem.Web. <br /> <br />
 To confirm your registration please click the following link: <a href=""{callbackUrl}"">confirm your registration</a> <br /> <br />
 If you didn't request this registration, you can safely ignore this email. Someone else might have typed your email address by mistake.";                    
 

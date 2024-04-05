@@ -34,7 +34,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Layout
         protected NotificationService NotificationService { get; set; }
 
         private bool sidebarExpanded = true;
-        private bool sidebarVisible = true;
 
         [Inject]
         protected SecurityService Security { get; set; }
@@ -42,28 +41,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Layout
         void SidebarToggleClick()
         {
             sidebarExpanded = !sidebarExpanded;
-        }
-        
-        protected override void OnInitialized()
-        {
-            UpdateSidebarVisibility();
-            NavigationManager.LocationChanged += HandleLocationChanged;
-        }
-
-        private void UpdateSidebarVisibility()
-        {
-            // Hide the sidebar on the login page
-            sidebarVisible = !NavigationManager.Uri.Contains("/login");
-        }
-
-        private void HandleLocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
-        {
-            UpdateSidebarVisibility();
-        }
-
-        public void Dispose()
-        {
-            NavigationManager.LocationChanged -= HandleLocationChanged;
         }
 
         protected void ProfileMenuClick(RadzenProfileMenuItem args)

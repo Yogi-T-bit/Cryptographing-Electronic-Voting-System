@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -33,11 +32,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected NotificationService NotificationService { get; set; }
 
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
-        protected IEnumerable<tallyingcenter> tallyingcenters;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> tallyingcenters;
 
-        protected RadzenDataGrid<tallyingcenter> grid0;
+        protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> grid0;
 
         protected string search = "";
 
@@ -50,31 +49,31 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
             await grid0.GoToPage(0);
 
-            tallyingcenters = await ElectronicVotingSystemService.Gettallyingcenters(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Location.Contains(@0) || i.CenterPublicKey.Contains(@0)", FilterParameters = new object[] { search } });
+            tallyingcenters = await CryptographicElectronicVotingSystemService.GetTallyingcenters(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Location.Contains(@0) || i.CenterPublicKey.Contains(@0)", FilterParameters = new object[] { search } });
         }
         protected override async Task OnInitializedAsync()
         {
-            tallyingcenters = await ElectronicVotingSystemService.Gettallyingcenters(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Location.Contains(@0) || i.CenterPublicKey.Contains(@0)", FilterParameters = new object[] { search } });
+            tallyingcenters = await CryptographicElectronicVotingSystemService.GetTallyingcenters(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Location.Contains(@0) || i.CenterPublicKey.Contains(@0)", FilterParameters = new object[] { search } });
         }
 
         protected async Task AddButtonClick(MouseEventArgs args)
         {
-            await DialogService.OpenAsync<AddTallyingcenter>("Add tallyingcenter", null);
+            await DialogService.OpenAsync<AddTallyingcenter>("Add Tallyingcenter", null);
             await grid0.Reload();
         }
 
-        protected async Task EditRow(DataGridRowMouseEventArgs<tallyingcenter> args)
+        protected async Task EditRow(DataGridRowMouseEventArgs<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> args)
         {
-            await DialogService.OpenAsync<EditTallyingcenter>("Edit tallyingcenter", new Dictionary<string, object> { {"CenterID", args.Data.CenterID} });
+            await DialogService.OpenAsync<EditTallyingcenter>("Edit Tallyingcenter", new Dictionary<string, object> { {"CenterID", args.Data.CenterID} });
         }
 
-        protected async Task GridDeleteButtonClick(MouseEventArgs args, tallyingcenter tallyingcenter)
+        protected async Task GridDeleteButtonClick(MouseEventArgs args, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter tallyingcenter)
         {
             try
             {
                 if (await DialogService.Confirm("Are you sure you want to delete this record?") == true)
                 {
-                    var deleteResult = await ElectronicVotingSystemService.Deletetallyingcenter(tallyingcenter.CenterID);
+                    var deleteResult = await CryptographicElectronicVotingSystemService.DeleteTallyingcenter(tallyingcenter.CenterID);
 
                     if (deleteResult != null)
                     {
@@ -88,7 +87,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
                 {
                     Severity = NotificationSeverity.Error,
                     Summary = $"Error",
-                    Detail = $"Unable to delete tallyingcenter"
+                    Detail = $"Unable to delete Tallyingcenter"
                 });
             }
         }
@@ -97,24 +96,24 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         {
             if (args?.Value == "csv")
             {
-                await ElectronicVotingSystemService.ExporttallyingcentersToCSV(new Query
+                await CryptographicElectronicVotingSystemService.ExportTallyingcentersToCSV(new Query
 {
     Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
     OrderBy = $"{grid0.Query.OrderBy}",
     Expand = "",
     Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "tallyingcenters");
+}, "Tallyingcenters");
             }
 
             if (args == null || args.Value == "xlsx")
             {
-                await ElectronicVotingSystemService.ExporttallyingcentersToExcel(new Query
+                await CryptographicElectronicVotingSystemService.ExportTallyingcentersToExcel(new Query
 {
     Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
     OrderBy = $"{grid0.Query.OrderBy}",
     Expand = "",
     Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "tallyingcenters");
+}, "Tallyingcenters");
             }
         }
     }

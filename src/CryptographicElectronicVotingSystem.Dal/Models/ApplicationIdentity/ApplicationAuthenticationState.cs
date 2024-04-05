@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CryptographicElectronicVotingSystem.Dal.Models.Authentication
+namespace CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity
 {
     public class ApplicationClaim
     {

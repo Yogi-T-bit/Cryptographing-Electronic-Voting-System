@@ -2,21 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
-namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
+namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem
 {
     [Table("voters")]
-    public partial class voter
+    public partial class Voter
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)] // Changed from Identity to None
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long VoterID { get; set; }
 
-        [Required]
         public string FullName { get; set; }
 
-        [Required]
         public string Email { get; set; }
 
         public bool IsAuthorized { get; set; }
@@ -25,7 +23,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
 
         public string VoterPublicKey { get; set; }
 
-        public ICollection<vote> votes { get; set; }
+        public ICollection<Vote> Votes { get; set; }
         
         // Add a foreign key property for ApplicationUser
         public string ApplicationUserId { get; set; }
@@ -33,6 +31,5 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
         // Navigation property to ApplicationUser
         [ForeignKey("ApplicationUserId")]
         public virtual ApplicationUser ApplicationUser { get; set; }
-
     }
 }

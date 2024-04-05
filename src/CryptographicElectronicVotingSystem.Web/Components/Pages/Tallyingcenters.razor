@@ -2,11 +2,11 @@
 
 @attribute [Authorize]
 
-<PageTitle>tallyingcenters</PageTitle>
+<PageTitle>Tallyingcenters</PageTitle>
 <RadzenStack>
     <RadzenRow AlignItems="AlignItems.Center">
         <RadzenColumn Size="12" SizeMD="6">
-            <RadzenText Text="tallyingcenters" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+            <RadzenText Text="Tallyingcenters" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="6">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
@@ -22,17 +22,17 @@
     <RadzenRow>
       <RadzenColumn SizeMD=12>
         <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
-            Data="@tallyingcenters" TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" RowDoubleClick="@EditRow">
+            Data="@tallyingcenters" TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" RowDoubleClick="@EditRow">
             <Columns>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Property="CenterID" Title="Center I D">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Property="CenterID" Title="Center I D">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Property="Name" Title="Name">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Property="Name" Title="Name">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Property="Location" Title="Location">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Property="Location" Title="Location">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Property="CenterPublicKey" Title="Center Public Key">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Property="CenterPublicKey" Title="Center Public Key">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                     <Template Context="tallyingcenter">
 
                         <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
+namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem
 {
     [Table("votes")]
-    public partial class vote
+    public partial class Vote
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,14 +14,15 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
 
         public long? VoterID { get; set; }
 
-        public voter voter { get; set; }
+        public Voter Voter { get; set; }
 
         public int? CandidateID { get; set; }
 
-        public candidate candidate { get; set; }
+        public Candidate Candidate { get; set; }
 
         public DateTime? Timestamp { get; set; }
 
+        [Required]
         public string VoteProof { get; set; }
 
     }

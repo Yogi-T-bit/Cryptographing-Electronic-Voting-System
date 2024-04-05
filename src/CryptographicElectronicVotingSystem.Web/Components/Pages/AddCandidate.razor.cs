@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -33,51 +31,20 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            candidate = new candidate();
-        }
-        [Inject]
-        public FakeDataGenerator DataGenerator { get; set; }
-        
-        protected async Task GenerateCandidates()
-        {
-            try
-            {
-                var candidates = DataGenerator.GenerateCandidates(2);
-                foreach (var candidate in candidates)
-                {
-                    await ElectronicVotingSystemService.Createcandidate(candidate);
-                }
-
-                // Notify user about success
-                NotificationService.Notify(NotificationSeverity.Success, "Candidates Generated", $"{candidates.Count} fake candidates have been successfully generated and saved.", 5000);
-
-                // Optionally, refresh the UI or redirect
-                await InvokeAsync(StateHasChanged);
-                DialogService.Close(candidate);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-
-                // Update UI to reflect the error
-                errorVisible = true;
-
-                // Notify user about the error
-                NotificationService.Notify(NotificationSeverity.Error, "Error Generating Candidates", "There was an error generating the candidates. Please try again.", 7000);
-            }
+            candidate = new CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate();
         }
         protected bool errorVisible;
-        protected candidate candidate;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate candidate;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Createcandidate(candidate);
+                await CryptographicElectronicVotingSystemService.CreateCandidate(candidate);
                 DialogService.Close(candidate);
             }
             catch (Exception ex)

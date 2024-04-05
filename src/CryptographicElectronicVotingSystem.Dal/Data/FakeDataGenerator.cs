@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Bogus;
 using System.Collections.Generic;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
+using CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
 
 namespace CryptographicElectronicVotingSystem.Dal.Data
 {
     public class FakeDataGenerator
     {
-        public List<candidate> GenerateCandidates(int numberOfCandidates)
+        public List<Candidate> GenerateCandidates(int numberOfCandidates)
         {
             var candidateId = 10;
-            var candidateFaker = new Faker<candidate>()
+            var candidateFaker = new Faker<Candidate>()
                 .RuleFor(c => c.CandidateID, _ => candidateId++)
                 .RuleFor(c => c.Name, f => f.Name.FullName())
                 .RuleFor(c => c.Party, f => f.PickRandom(new string[] { "Democratic", "Republican", "Libertarian" }));
@@ -23,9 +23,9 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
             return candidateFaker.Generate(numberOfCandidates);
         }
         
-        public List<tallyingcenter> GenerateTallyingCenters(int numberOfCenters)
+        public List<Tallyingcenter> GenerateTallyingCenters(int numberOfCenters)
         {
-            var centerFaker = new Faker<tallyingcenter>()
+            var centerFaker = new Faker<Tallyingcenter>()
                 .RuleFor(t => t.Name, f => f.Company.CompanyName())
                 .RuleFor(t => t.Location, f => f.Address.FullAddress())
                 .RuleFor(t => t.CenterPublicKey, f => f.Random.AlphaNumeric(20));
@@ -33,7 +33,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
             return centerFaker.Generate(numberOfCenters);
         }
         
-        public List<voter> GenerateVoters(int numberOfVoters, List<ApplicationUser> users)
+        public List<Voter> GenerateVoters(int numberOfVoters, List<ApplicationUser> users)
         {
             // Check if we have enough users to match the number of voters
             if (users.Count < numberOfVoters)
@@ -44,7 +44,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
             // Shuffle the list of users to randomly pick users for voters
             var shuffledUsers = users.OrderBy(_ => Guid.NewGuid()).ToList();
 
-            var voterFaker = new Faker<voter>()
+            var voterFaker = new Faker<Voter>()
                 //.RuleFor(v => v.VoterId, f => f.Random.Long(1000000000, 9999999999)) // Assuming VoterId is auto-generated
                 .RuleFor(v => v.FullName, (f, v) => f.Name.FullName())
                 .RuleFor(v => v.Email, (f, v) => f.Internet.Email())
@@ -63,9 +63,9 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
             return voters;
         }
         
-        public List<votetally> GenerateVoteTallies(int numberOfTallies, List<candidate> candidates, List<tallyingcenter> centers)
+        public List<Votetally> GenerateVoteTallies(int numberOfTallies, List<Candidate> candidates, List<Tallyingcenter> centers)
         {
-            var tallyFaker = new Faker<votetally>()
+            var tallyFaker = new Faker<Votetally>()
                 .RuleFor(t => t.CandidateID, f => f.PickRandom(candidates).CandidateID)
                 .RuleFor(t => t.CenterID, f => f.PickRandom(centers).CenterID)
                 .RuleFor(t => t.VoteCount, f => f.Random.Int(0, 1000));
@@ -73,7 +73,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
             return tallyFaker.Generate(numberOfTallies);
         }
         
-        public List<vote> GenerateVotes(int numberOfVotes, List<candidate> candidates, List<voter> voters)
+        public List<Vote> GenerateVotes(int numberOfVotes, List<Candidate> candidates, List<Voter> voters)
         {
             // Ensure that we have candidates and voters to assign votes to.
             if (!candidates.Any() || !voters.Any())
@@ -81,7 +81,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
                 throw new InvalidOperationException("Candidates and voters lists must not be empty.");
             }
 
-            List<vote> votes = new List<vote>();
+            List<Vote> votes = new List<Vote>();
             var availableVoters = voters.ToList(); // Create a copy of the voters list.
 
             for (int i = 0; i < numberOfVotes; i++)
@@ -94,7 +94,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
                 var voter = availableVoters.First(); // Pick the first available voter.
                 availableVoters.Remove(voter); // Remove the picked voter from available voters.
 
-                var voteFaker = new Faker<vote>()
+                var voteFaker = new Faker<Vote>()
                     //.RuleFor(v => v.VoteId, f => 0) // Assuming VoteId is auto-generated
                     .RuleFor(v => v.CandidateID, f => f.PickRandom(candidates).CandidateID)
                     .RuleFor(v => v.VoterID, _ => voter.VoterID) // Use the picked voter's ID

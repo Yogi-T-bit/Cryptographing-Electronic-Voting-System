@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
-namespace CryptographicElectronicVotingSystem.Dal.Models.Authentication
+namespace CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity
 {
     [Table("AspNetRoles")]
     public partial class ApplicationRole : IdentityRole
     {
         [JsonIgnore]
         public ICollection<ApplicationUser> Users { get; set; }
-        
+
     }
 }

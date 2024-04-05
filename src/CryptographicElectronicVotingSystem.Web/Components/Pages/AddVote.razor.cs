@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 
 namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 {
@@ -34,65 +31,28 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            vote = new vote();
+            vote = new CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote();
 
-            votersForVoterID = await ElectronicVotingSystemService.Getvoters();
+            votersForVoterID = await CryptographicElectronicVotingSystemService.GetVoters();
 
-            candidatesForCandidateID = await ElectronicVotingSystemService.Getcandidates();
+            candidatesForCandidateID = await CryptographicElectronicVotingSystemService.GetCandidates();
         }
-        [Inject]
-        public FakeDataGenerator DataGenerator { get; set; }
-        
-        protected async Task GenerateVotes()
-        {
-            try
-            {
-                // Assuming GetCandidates and GetVoters return IQueryable
-                var candidates = await ElectronicVotingSystemService.Getcandidates();
-                var voters = await ElectronicVotingSystemService.Getvoters();
-                
-                List<candidate> candidateList = candidates.ToList();
-                List<voter> votersList = voters.ToList();
-
-                // Now candidates and voters are List<T> which can be passed to GenerateVotes
-                var votes = DataGenerator.GenerateVotes(100, candidateList, votersList);
-                foreach (var vote in votes)
-                {
-                    await ElectronicVotingSystemService.Createvote(vote);
-                }
-
-                // Notify user about success
-                NotificationService.Notify(NotificationSeverity.Success, "Votes Generated", $"{votes.Count} fake votes have been successfully generated and saved.", 5000);
-
-                // Optionally, refresh the UI or redirect
-                await InvokeAsync(StateHasChanged);
-                DialogService.Close(null); // Assuming you want to close a dialog or similar
-            }
-            catch (Exception ex)
-            {
-                hasChanges = ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException;
-                canEdit = !(ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException);
-                errorVisible = true;
-            }
-        }
-
-
         protected bool errorVisible;
-        protected vote vote;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote vote;
 
-        protected IEnumerable<voter> votersForVoterID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> votersForVoterID;
 
-        protected IEnumerable<candidate> candidatesForCandidateID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> candidatesForCandidateID;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Createvote(vote);
+                await CryptographicElectronicVotingSystemService.CreateVote(vote);
                 DialogService.Close(vote);
             }
             catch (Exception ex)

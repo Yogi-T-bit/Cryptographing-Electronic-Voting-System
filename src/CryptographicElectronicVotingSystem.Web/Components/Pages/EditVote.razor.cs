@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,31 +31,31 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         [Parameter]
         public int VoteID { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            vote = await ElectronicVotingSystemService.GetvoteByVoteId(VoteID);
+            vote = await CryptographicElectronicVotingSystemService.GetVoteByVoteId(VoteID);
 
-            votersForVoterID = await ElectronicVotingSystemService.Getvoters();
+            votersForVoterID = await CryptographicElectronicVotingSystemService.GetVoters();
 
-            candidatesForCandidateID = await ElectronicVotingSystemService.Getcandidates();
+            candidatesForCandidateID = await CryptographicElectronicVotingSystemService.GetCandidates();
         }
         protected bool errorVisible;
-        protected vote vote;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote vote;
 
-        protected IEnumerable<voter> votersForVoterID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> votersForVoterID;
 
-        protected IEnumerable<candidate> candidatesForCandidateID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> candidatesForCandidateID;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Updatevote(VoteID, vote);
+                await CryptographicElectronicVotingSystemService.UpdateVote(VoteID, vote);
                 DialogService.Close(vote);
             }
             catch (Exception ex)
@@ -82,11 +81,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected async Task ReloadButtonClick(MouseEventArgs args)
         {
-           ElectronicVotingSystemService.Reset();
+           CryptographicElectronicVotingSystemService.Reset();
             hasChanges = false;
             canEdit = true;
 
-            vote = await ElectronicVotingSystemService.GetvoteByVoteId(VoteID);
+            vote = await CryptographicElectronicVotingSystemService.GetVoteByVoteId(VoteID);
         }
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 
-namespace CryptographicElectronicVotingSystem.Controllers
+namespace CryptographicElectronicVotingSystem.Web.Controllers
 {
     public partial class UploadController : Controller
     {

@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
+
+using CryptographicElectronicVotingSystem.Dal.Models;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
+using CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem;
 
 namespace CryptographicElectronicVotingSystem.Dal.Data
 {
@@ -26,31 +27,23 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Ignore<voter>();
-            builder.Ignore<vote>();
-            builder.Ignore<votetally>();
-            builder.Ignore<candidate>();
-            builder.Ignore<tallyingcenter>();
             
-            // Configure the one-to-one relationship between ApplicationUser and Voter
+            // exclude the following tables from the identity model (vote, Votetally, candidate, Tallyingcenter)
+            builder.Ignore<Vote>();
+            builder.Ignore<Votetally>();
+            builder.Ignore<Candidate>();
+            builder.Ignore<Tallyingcenter>();
+            
             builder.Entity<ApplicationUser>()
                 .HasOne(u => u.Voter) // ApplicationUser has one Voter
                 .WithOne() // Assuming no navigation property back from Voter to ApplicationUser
-                .HasForeignKey<ApplicationUser>(u => u.VoterId); // Applic
+                .HasForeignKey<ApplicationUser>(u => u.VoterId); // ApplicationUser uses VoterId as foreign key
 
             builder.Entity<ApplicationUser>()
-               .HasMany(u => u.Roles)
-               .WithMany(r => r.Users)
-               .UsingEntity<IdentityUserRole<string>>(
-                userRole => userRole.HasOne<ApplicationRole>().
-                       WithMany()
-                       .HasForeignKey(ur => ur.RoleId)
-                       .IsRequired(),
-                userRole => userRole.HasOne<ApplicationUser>()
-                    .WithMany()
-                    .HasForeignKey(ur => ur.UserId)
-                    .IsRequired());
-            
+                   .HasMany(u => u.Roles)
+                   .WithMany(r => r.Users)
+                   .UsingEntity<IdentityUserRole<string>>();
+
             this.OnModelBuilding(builder);
         }
     }

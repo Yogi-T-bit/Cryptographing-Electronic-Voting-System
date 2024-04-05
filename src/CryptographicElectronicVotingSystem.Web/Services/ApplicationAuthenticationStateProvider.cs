@@ -4,8 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
+
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
 namespace CryptographicElectronicVotingSystem.Web.Services
 {

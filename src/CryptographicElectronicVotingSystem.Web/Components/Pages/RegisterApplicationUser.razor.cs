@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,7 +31,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
 
-        protected ApplicationUser user;
+        protected CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser user;
         protected bool isBusy;
         protected bool errorVisible;
         protected string error;
@@ -42,7 +41,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            user = new ApplicationUser();
+            user = new CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser();
         }
 
         protected async Task FormSubmit()

@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.OData.Results;
 using Microsoft.AspNetCore.OData.Deltas;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
+using CryptographicElectronicVotingSystem.Web.Services;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
 namespace CryptographicElectronicVotingSystem.Web.Controllers
 {

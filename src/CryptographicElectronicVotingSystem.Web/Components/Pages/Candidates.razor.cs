@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -33,11 +32,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected NotificationService NotificationService { get; set; }
 
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
-        protected IEnumerable<candidate> candidates;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> candidates;
 
-        protected RadzenDataGrid<candidate> grid0;
+        protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> grid0;
 
         protected string search = "";
 
@@ -50,31 +49,31 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
             await grid0.GoToPage(0);
 
-            candidates = await ElectronicVotingSystemService.Getcandidates(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Party.Contains(@0)", FilterParameters = new object[] { search } });
+            candidates = await CryptographicElectronicVotingSystemService.GetCandidates(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Party.Contains(@0)", FilterParameters = new object[] { search } });
         }
         protected override async Task OnInitializedAsync()
         {
-            candidates = await ElectronicVotingSystemService.Getcandidates(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Party.Contains(@0)", FilterParameters = new object[] { search } });
+            candidates = await CryptographicElectronicVotingSystemService.GetCandidates(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Party.Contains(@0)", FilterParameters = new object[] { search } });
         }
 
         protected async Task AddButtonClick(MouseEventArgs args)
         {
-            await DialogService.OpenAsync<AddCandidate>("Add candidate", null);
+            await DialogService.OpenAsync<AddCandidate>("Add Candidate", null);
             await grid0.Reload();
         }
 
-        protected async Task EditRow(DataGridRowMouseEventArgs<candidate> args)
+        protected async Task EditRow(DataGridRowMouseEventArgs<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> args)
         {
-            await DialogService.OpenAsync<EditCandidate>("Edit candidate", new Dictionary<string, object> { {"CandidateID", args.Data.CandidateID} });
+            await DialogService.OpenAsync<EditCandidate>("Edit Candidate", new Dictionary<string, object> { {"CandidateID", args.Data.CandidateID} });
         }
 
-        protected async Task GridDeleteButtonClick(MouseEventArgs args, candidate candidate)
+        protected async Task GridDeleteButtonClick(MouseEventArgs args, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate candidate)
         {
             try
             {
                 if (await DialogService.Confirm("Are you sure you want to delete this record?") == true)
                 {
-                    var deleteResult = await ElectronicVotingSystemService.Deletecandidate(candidate.CandidateID);
+                    var deleteResult = await CryptographicElectronicVotingSystemService.DeleteCandidate(candidate.CandidateID);
 
                     if (deleteResult != null)
                     {
@@ -88,7 +87,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
                 {
                     Severity = NotificationSeverity.Error,
                     Summary = $"Error",
-                    Detail = $"Unable to delete candidate"
+                    Detail = $"Unable to delete Candidate"
                 });
             }
         }
@@ -97,24 +96,24 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         {
             if (args?.Value == "csv")
             {
-                await ElectronicVotingSystemService.ExportcandidatesToCSV(new Query
+                await CryptographicElectronicVotingSystemService.ExportCandidatesToCSV(new Query
 {
     Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
     OrderBy = $"{grid0.Query.OrderBy}",
     Expand = "",
     Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "candidates");
+}, "Candidates");
             }
 
             if (args == null || args.Value == "xlsx")
             {
-                await ElectronicVotingSystemService.ExportcandidatesToExcel(new Query
+                await CryptographicElectronicVotingSystemService.ExportCandidatesToExcel(new Query
 {
     Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
     OrderBy = $"{grid0.Query.OrderBy}",
     Expand = "",
     Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "candidates");
+}, "Candidates");
             }
         }
     }

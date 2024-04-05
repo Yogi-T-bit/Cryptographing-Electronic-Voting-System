@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CryptographicElectronicVotingSystem.Controllers
+namespace CryptographicElectronicVotingSystem.Web.Controllers
 {
     public partial class ReportController : Controller
     {

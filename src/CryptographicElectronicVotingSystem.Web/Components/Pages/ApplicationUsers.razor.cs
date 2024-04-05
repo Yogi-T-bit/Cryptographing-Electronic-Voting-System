@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,8 +31,8 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
 
-        protected IEnumerable<ApplicationUser> users;
-        protected RadzenDataGrid<ApplicationUser> grid0;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser> users;
+        protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser> grid0;
         protected string error;
         protected bool errorVisible;
 
@@ -52,14 +51,14 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             users = await Security.GetUsers();
         }
 
-        protected async Task RowSelect(ApplicationUser user)
+        protected async Task RowSelect(CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser user)
         {
             await DialogService.OpenAsync<EditApplicationUser>("Edit Application User", new Dictionary<string, object>{ {"Id", user.Id} });
 
             users = await Security.GetUsers();
         }
 
-        protected async Task DeleteClick(ApplicationUser user)
+        protected async Task DeleteClick(CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser user)
         {
             try
             {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,23 +31,23 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         [Parameter]
-        public int VoterID { get; set; }
+        public long VoterID { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            voter = await ElectronicVotingSystemService.GetvoterByVoterId(VoterID);
+            voter = await CryptographicElectronicVotingSystemService.GetVoterByVoterId(VoterID);
         }
         protected bool errorVisible;
-        protected voter voter;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter voter;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Updatevoter(VoterID, voter);
+                await CryptographicElectronicVotingSystemService.UpdateVoter(VoterID, voter);
                 DialogService.Close(voter);
             }
             catch (Exception ex)
@@ -74,11 +73,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected async Task ReloadButtonClick(MouseEventArgs args)
         {
-           ElectronicVotingSystemService.Reset();
+           CryptographicElectronicVotingSystemService.Reset();
             hasChanges = false;
             canEdit = true;
 
-            voter = await ElectronicVotingSystemService.GetvoterByVoterId(VoterID);
+            voter = await CryptographicElectronicVotingSystemService.GetVoterByVoterId(VoterID);
         }
     }
 }

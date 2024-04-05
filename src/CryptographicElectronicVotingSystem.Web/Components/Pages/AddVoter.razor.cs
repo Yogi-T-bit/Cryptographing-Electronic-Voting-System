@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -34,53 +31,20 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
-        
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            voter = new voter();
-            //ApplicationUserID = await Security.GetUsers();
-        }
-        [Inject]
-        public FakeDataGenerator DataGenerator { get; set; }
-        protected async Task GenerateVoters()
-        {
-            try
-            { 
-                var users = await Security.GetUsers();
-                
-                List<ApplicationUser> usersList = users.ToList();
-                
-                var voters = DataGenerator.GenerateVoters(5, usersList);
-                foreach (var voter in voters)
-                {
-                    await ElectronicVotingSystemService.Createvoter(voter);
-                }
-
-                // Notify user about success
-                NotificationService.Notify(NotificationSeverity.Success, "Voters Generated", $"{voters.Count} fake voters have been successfully generated and saved.", 5000);
-
-                // Optionally, refresh the UI or redirect
-                await InvokeAsync(StateHasChanged);
-                DialogService.Close(voter);
-            }
-            catch (Exception ex)
-            {
-                hasChanges = ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException;
-                canEdit = !(ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException);
-                errorVisible = true;
-            }
+            voter = new CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter();
         }
         protected bool errorVisible;
-        protected voter voter;
-        protected IEnumerable<ApplicationUser> ApplicationUserID;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter voter;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Createvoter(voter);
+                await CryptographicElectronicVotingSystemService.CreateVoter(voter);
                 DialogService.Close(voter);
             }
             catch (Exception ex)

@@ -1,13 +1,12 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
 namespace CryptographicElectronicVotingSystem.Web.Controllers
 {

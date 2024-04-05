@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
+using CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem;
 using Microsoft.AspNetCore.Identity;
 
-namespace CryptographicElectronicVotingSystem.Dal.Models.Authentication
+namespace CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity
 {
     [Table("AspNetUsers")]
     public partial class ApplicationUser : IdentityUser
@@ -37,9 +37,9 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.Authentication
         public ICollection<ApplicationRole> Roles { get; set; }
         
         // Add a foreign key for Voter
-        public long? VoterId { get; set; }
+        public long VoterId { get; set; }
 
         // Navigation property to Voter
-        public virtual voter Voter { get; set; }
+        public virtual Voter Voter { get; set; }
     }
 }

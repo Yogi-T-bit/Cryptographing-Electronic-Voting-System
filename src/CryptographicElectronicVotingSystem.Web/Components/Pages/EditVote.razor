@@ -2,7 +2,7 @@
 
 @attribute [Authorize]
 
-<PageTitle>Edit vote</PageTitle>
+<PageTitle>Edit Vote</PageTitle>
 <RadzenRow>
     <RadzenColumn SizeMD="9">
     <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)" />
@@ -21,25 +21,25 @@
 </RadzenRow>
 
     <RadzenColumn SizeMD=12>
-        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save vote</RadzenAlert>
-        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote" Data="@vote" Visible="@(vote != null && canEdit)" Submit="@FormSubmit">
+        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Vote</RadzenAlert>
+        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Data="@vote" Visible="@(vote != null && canEdit)" Submit="@FormSubmit">
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
-                    <RadzenLabel Text="voter" Component="voter" style="width: 100%" />
+                    <RadzenLabel Text="Voter" Component="Voter" style="width: 100%" />
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
                     <RadzenDropDownDataGrid Data="@votersForVoterID" TextProperty="FullName" ValueProperty="VoterID" AllowClear=true
-                         Placeholder="Choose voter" style="display: block; width: 100%" @bind-Value="@vote.VoterID" Name="VoterID"
+                         Placeholder="Choose Voter" style="display: block; width: 100%" @bind-Value="@vote.VoterID" Name="VoterID"
                            />
                 </RadzenColumn>
             </RadzenRow>
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
-                    <RadzenLabel Text="candidate" Component="candidate" style="width: 100%" />
+                    <RadzenLabel Text="Candidate" Component="Candidate" style="width: 100%" />
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
                     <RadzenDropDownDataGrid Data="@candidatesForCandidateID" TextProperty="Name" ValueProperty="CandidateID" AllowClear=true
-                         Placeholder="Choose candidate" style="display: block; width: 100%" @bind-Value="@vote.CandidateID" Name="CandidateID"
+                         Placeholder="Choose Candidate" style="display: block; width: 100%" @bind-Value="@vote.CandidateID" Name="CandidateID"
                            />
                 </RadzenColumn>
             </RadzenRow>
@@ -57,6 +57,7 @@
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@vote.VoteProof" Name="VoteProof" />
+                    <RadzenRequiredValidator Component="VoteProof" Text="VoteProof is required" />
                 </RadzenColumn>
             </RadzenRow>
           <RadzenStack  Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">

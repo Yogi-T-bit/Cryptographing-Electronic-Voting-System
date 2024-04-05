@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -35,7 +34,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected string oldPassword = "";
         protected string newPassword = "";
         protected string confirmPassword = "";
-        protected ApplicationUser user;
+        protected CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser user;
         protected string error;
         protected bool errorVisible;
         protected bool successVisible;

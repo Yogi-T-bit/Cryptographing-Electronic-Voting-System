@@ -2,40 +2,40 @@
 
 @attribute [Authorize]
 
-<PageTitle>Add tallyingcenter</PageTitle>
+<PageTitle>Add Tallyingcenter</PageTitle>
     <RadzenColumn SizeMD=12>
-        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save tallyingcenter</RadzenAlert>
-        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Data="@tallyingcenter" Visible="@(tallyingcenter != null && canEdit)" Submit="@FormSubmit">
-          <RadzenStack>
-            <RadzenFormField Text="Name" Variant="Variant.Filled">
-                  <ChildContent>
+        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Tallyingcenter</RadzenAlert>
+        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Data="@tallyingcenter" Visible="@(tallyingcenter != null && canEdit)" Submit="@FormSubmit">
+            <RadzenRow style="margin-bottom: 1rem">
+                <RadzenColumn SizeMD="3">
+                    <RadzenLabel Text="Name" Component="Name" style="width: 100%" />
+                </RadzenColumn>
+                <RadzenColumn SizeMD="9">
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@tallyingcenter.Name" Name="Name" />
-                  </ChildContent>    
-                  <Helper>
                     <RadzenRequiredValidator Component="Name" Text="Name is required" />
-                  </Helper>
-            </RadzenFormField>
-            <RadzenFormField Text="Location" Variant="Variant.Filled">
-                  <ChildContent>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow style="margin-bottom: 1rem">
+                <RadzenColumn SizeMD="3">
+                    <RadzenLabel Text="Location" Component="Location" style="width: 100%" />
+                </RadzenColumn>
+                <RadzenColumn SizeMD="9">
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@tallyingcenter.Location" Name="Location" />
-                  </ChildContent>    
-                  <Helper>
                     <RadzenRequiredValidator Component="Location" Text="Location is required" />
-                  </Helper>
-            </RadzenFormField>
-            <RadzenFormField Text="Center Public Key" Variant="Variant.Filled">
-                  <ChildContent>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow style="margin-bottom: 1rem">
+                <RadzenColumn SizeMD="3">
+                    <RadzenLabel Text="Center Public Key" Component="CenterPublicKey" style="width: 100%" />
+                </RadzenColumn>
+                <RadzenColumn SizeMD="9">
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@tallyingcenter.CenterPublicKey" Name="CenterPublicKey" />
-                  </ChildContent>    
-                  <Helper>
                     <RadzenRequiredValidator Component="CenterPublicKey" Text="CenterPublicKey is required" />
-                  </Helper>
-            </RadzenFormField>
-          </RadzenStack>
-          <RadzenStack style="margin-top:1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
-              <RadzenButton ButtonStyle="ButtonStyle.Primary" Icon="add" Text="Generate Fake Candidates" Click="@(() => GenerateTallyingCenters())" />
-            <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick"  />
+                </RadzenColumn>
+            </RadzenRow>
+          <RadzenStack  Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick"  />
           </RadzenStack>
         </RadzenTemplateForm>
     </RadzenColumn>

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
+namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem
 {
     [Table("candidates")]
-    public partial class candidate
+    public partial class Candidate
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)] // Changed from Identity to None
+        [Required]
         public int CandidateID { get; set; }
 
         [Required]
@@ -18,9 +18,9 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem
         [Required]
         public string Party { get; set; }
 
-        public ICollection<vote> votes { get; set; }
+        public ICollection<Vote> Votes { get; set; }
 
-        public ICollection<votetally> votetallies { get; set; }
+        public ICollection<Votetally> Votetallies { get; set; }
 
     }
 }

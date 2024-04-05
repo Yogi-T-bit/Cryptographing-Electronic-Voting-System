@@ -20,7 +20,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                  .HasAnnotation("ProductVersion", "3.0.0")
                  .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationRole", b =>
                 {
                     b.Property<string>("Id");
 
@@ -126,7 +126,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -179,7 +179,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationRole")
                         .WithMany("Claims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -187,7 +187,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationUser")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -195,7 +195,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationUser")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -203,7 +203,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationUser")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -211,12 +211,12 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationRole")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationUser")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CryptographicElectronicVotingSystem.Dal.Migrations
 {
-    [DbContext(typeof(ElectronicVotingSystemContext))]
-    [Migration("20240405063752_VoterRelationship")]
-    partial class VoterRelationship
+    [DbContext(typeof(CryptographicElectronicVotingSystemContext))]
+    [Migration("20240405134653_UserRelationship")]
+    partial class UserRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -73,7 +73,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                     b.Property<long>("VoterID")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("VoterId")
+                    b.Property<long>("VoterId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -86,9 +86,10 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate", b =>
                 {
                     b.Property<int>("CandidateID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -107,7 +108,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter", b =>
                 {
                     b.Property<int>("CenterID")
                         .ValueGeneratedOnAdd()
@@ -133,7 +134,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote", b =>
                 {
                     b.Property<int>("VoteID")
                         .ValueGeneratedOnAdd()
@@ -166,9 +167,10 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
                 {
                     b.Property<long>("VoterID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     b.Property<string>("ApplicationUserId")
@@ -204,7 +206,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.votetally", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally", b =>
                 {
                     b.Property<int>("TallyID")
                         .ValueGeneratedOnAdd()
@@ -233,9 +235,9 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", "Voter")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", "Voter")
                         .WithMany()
                         .HasForeignKey("VoterID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -244,62 +246,62 @@ namespace CryptographicElectronicVotingSystem.Dal.Migrations
                     b.Navigation("Voter");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.vote", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", "candidate")
-                        .WithMany("votes")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate", "Candidate")
+                        .WithMany("Votes")
                         .HasForeignKey("CandidateID");
 
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", "voter")
-                        .WithMany("votes")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", "Voter")
+                        .WithMany("Votes")
                         .HasForeignKey("VoterID");
 
-                    b.Navigation("candidate");
+                    b.Navigation("Candidate");
 
-                    b.Navigation("voter");
+                    b.Navigation("Voter");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", "ApplicationUser")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", "ApplicationUser")
                         .WithOne()
-                        .HasForeignKey("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", "ApplicationUserId")
+                        .HasForeignKey("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", "ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.votetally", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", "candidate")
-                        .WithMany("votetallies")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate", "Candidate")
+                        .WithMany("Votetallies")
                         .HasForeignKey("CandidateID");
 
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter", "tallyingcenter")
-                        .WithMany("votetallies")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter", "Tallyingcenter")
+                        .WithMany("Votetallies")
                         .HasForeignKey("CenterID");
 
-                    b.Navigation("candidate");
+                    b.Navigation("Candidate");
 
-                    b.Navigation("tallyingcenter");
+                    b.Navigation("Tallyingcenter");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.candidate", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate", b =>
                 {
-                    b.Navigation("votes");
+                    b.Navigation("Votes");
 
-                    b.Navigation("votetallies");
+                    b.Navigation("Votetallies");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter", b =>
                 {
-                    b.Navigation("votetallies");
+                    b.Navigation("Votetallies");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
                 {
-                    b.Navigation("votes");
+                    b.Navigation("Votes");
                 });
 #pragma warning restore 612, 618
         }

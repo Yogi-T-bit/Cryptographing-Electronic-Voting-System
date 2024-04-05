@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,8 +31,8 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
 
-        protected IEnumerable<ApplicationRole> roles;
-        protected ApplicationUser user;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole> roles;
+        protected CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser user;
         protected IEnumerable<string> userRoles;
         protected string error;
         protected bool errorVisible;
@@ -53,7 +52,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             roles = await Security.GetRoles();
         }
 
-        protected async Task FormSubmit(ApplicationUser user)
+        protected async Task FormSubmit(CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser user)
         {
             try
             {

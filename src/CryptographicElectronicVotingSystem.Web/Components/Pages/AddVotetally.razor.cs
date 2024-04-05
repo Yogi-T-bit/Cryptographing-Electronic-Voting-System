@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Data;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -33,71 +31,28 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            votetally = new votetally();
+            votetally = new CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally();
 
-            tallyingcentersForCenterID = await ElectronicVotingSystemService.Gettallyingcenters();
+            tallyingcentersForCenterID = await CryptographicElectronicVotingSystemService.GetTallyingcenters();
 
-            candidatesForCandidateID = await ElectronicVotingSystemService.Getcandidates();
+            candidatesForCandidateID = await CryptographicElectronicVotingSystemService.GetCandidates();
         }
-        
-        [Inject]
-        public FakeDataGenerator DataGenerator { get; set; }
-        
-        protected async Task GenerateVoteTallies()
-        {
-            try
-            {
-                
-                // Assuming GetCandidates and GetTallyingCenters return IQueryable
-                var candidates = await ElectronicVotingSystemService.Getcandidates();
-                var tallyingcenters = await ElectronicVotingSystemService.Gettallyingcenters();
-                
-                List<candidate> candidateList = candidates.ToList();
-                List<tallyingcenter> tallyingcenterList = tallyingcenters.ToList();
-                
-                var tallies = DataGenerator.GenerateVoteTallies(200, candidateList, tallyingcenterList);
-                
-                // Save the generated tallies
-                foreach (var tally in tallies)
-                {
-                    await ElectronicVotingSystemService.Createvotetally(tally);
-                }
-
-                // Notify user about success
-                NotificationService.Notify(NotificationSeverity.Success, "Vote Tallies Generated",
-                    $"{tallies.Count} fake vote tallies have been successfully generated and saved.", 5000);
-
-                // Optionally, refresh the UI or redirect
-                await InvokeAsync(StateHasChanged);
-                DialogService.Close(votetally);
-            }
-            catch (Exception ex)
-            {
-                NotificationService.Notify(NotificationSeverity.Error, "Error", "An error occurred while generating vote tallies.", 5000);
-            }
-        }
-        
-        
-        
-        
-        
-        
         protected bool errorVisible;
-        protected votetally votetally;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally votetally;
 
-        protected IEnumerable<tallyingcenter> tallyingcentersForCenterID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> tallyingcentersForCenterID;
 
-        protected IEnumerable<candidate> candidatesForCandidateID;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> candidatesForCandidateID;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Createvotetally(votetally);
+                await CryptographicElectronicVotingSystemService.CreateVotetally(votetally);
                 DialogService.Close(votetally);
             }
             catch (Exception ex)

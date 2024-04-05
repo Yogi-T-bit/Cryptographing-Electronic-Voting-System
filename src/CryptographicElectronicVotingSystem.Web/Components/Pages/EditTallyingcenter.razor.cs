@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,23 +31,23 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
         [Parameter]
         public int CenterID { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            tallyingcenter = await ElectronicVotingSystemService.GettallyingcenterByCenterId(CenterID);
+            tallyingcenter = await CryptographicElectronicVotingSystemService.GetTallyingcenterByCenterId(CenterID);
         }
         protected bool errorVisible;
-        protected tallyingcenter tallyingcenter;
+        protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter tallyingcenter;
 
         protected async Task FormSubmit()
         {
             try
             {
-                await ElectronicVotingSystemService.Updatetallyingcenter(CenterID, tallyingcenter);
+                await CryptographicElectronicVotingSystemService.UpdateTallyingcenter(CenterID, tallyingcenter);
                 DialogService.Close(tallyingcenter);
             }
             catch (Exception ex)
@@ -74,11 +73,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected async Task ReloadButtonClick(MouseEventArgs args)
         {
-           ElectronicVotingSystemService.Reset();
+           CryptographicElectronicVotingSystemService.Reset();
             hasChanges = false;
             canEdit = true;
 
-            tallyingcenter = await ElectronicVotingSystemService.GettallyingcenterByCenterId(CenterID);
+            tallyingcenter = await CryptographicElectronicVotingSystemService.GetTallyingcenterByCenterId(CenterID);
         }
     }
 }

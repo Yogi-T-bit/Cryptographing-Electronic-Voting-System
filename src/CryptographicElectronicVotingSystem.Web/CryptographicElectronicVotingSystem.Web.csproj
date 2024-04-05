@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <NoWarn>CS0168,CS1998,BL9993,CS0649,CS0436,0436</NoWarn>
+    <UserSecretsId>7326d4f3-3a2f-46ee-894d-9b36402ea24a</UserSecretsId>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>7326d4f3-3a2f-46ee-894d-9b36402ea24a</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Radzen.Blazor" Version="*" />
@@ -11,6 +11,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0-beta.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.HeaderPropagation" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CryptographicElectronicVotingSystem.Dal\CryptographicElectronicVotingSystem.Dal.csproj" />

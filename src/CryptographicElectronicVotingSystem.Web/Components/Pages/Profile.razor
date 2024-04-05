@@ -10,7 +10,7 @@
     </RadzenRow>
     <RadzenRow>
         <RadzenColumn SizeMD="12">
-            <RadzenTemplateForm Method="post" Submit="@FormSubmit" TItem="CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser" Data="@user"
+            <RadzenTemplateForm Method="post" Submit="@FormSubmit" TItem="CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser" Data="@user"
                 Visible="@(user != null)">
                 <RadzenAlert Size="AlertSize.Large" Shade="Shade.Light" AlertStyle="AlertStyle.Danger" Variant="Variant.Flat" Title="Cannot change password" Visible="@errorVisible">@error</RadzenAlert>
                 <RadzenAlert Size="AlertSize.Large" Shade="Shade.Light" AlertStyle="AlertStyle.Success" Variant="Variant.Flat" Visible="@successVisible">

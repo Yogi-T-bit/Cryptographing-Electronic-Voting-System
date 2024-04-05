@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -33,11 +32,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected NotificationService NotificationService { get; set; }
 
         [Inject]
-        public ElectronicVotingSystemService ElectronicVotingSystemService { get; set; }
+        public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
 
-        protected IEnumerable<votetally> votetallies;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> votetallies;
 
-        protected RadzenDataGrid<votetally> grid0;
+        protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> grid0;
 
         protected string search = "";
 
@@ -50,31 +49,31 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
             await grid0.GoToPage(0);
 
-            votetallies = await ElectronicVotingSystemService.Getvotetallies(new Query { Expand = "tallyingcenter,candidate" });
+            votetallies = await CryptographicElectronicVotingSystemService.GetVotetallies(new Query { Expand = "Tallyingcenter,Candidate" });
         }
         protected override async Task OnInitializedAsync()
         {
-            votetallies = await ElectronicVotingSystemService.Getvotetallies(new Query { Expand = "tallyingcenter,candidate" });
+            votetallies = await CryptographicElectronicVotingSystemService.GetVotetallies(new Query { Expand = "Tallyingcenter,Candidate" });
         }
 
         protected async Task AddButtonClick(MouseEventArgs args)
         {
-            await DialogService.OpenAsync<AddVotetally>("Add votetally", null);
+            await DialogService.OpenAsync<AddVotetally>("Add Votetally", null);
             await grid0.Reload();
         }
 
-        protected async Task EditRow(DataGridRowMouseEventArgs<votetally> args)
+        protected async Task EditRow(DataGridRowMouseEventArgs<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> args)
         {
-            await DialogService.OpenAsync<EditVotetally>("Edit votetally", new Dictionary<string, object> { {"TallyID", args.Data.TallyID} });
+            await DialogService.OpenAsync<EditVotetally>("Edit Votetally", new Dictionary<string, object> { {"TallyID", args.Data.TallyID} });
         }
 
-        protected async Task GridDeleteButtonClick(MouseEventArgs args, votetally votetally)
+        protected async Task GridDeleteButtonClick(MouseEventArgs args, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally votetally)
         {
             try
             {
                 if (await DialogService.Confirm("Are you sure you want to delete this record?") == true)
                 {
-                    var deleteResult = await ElectronicVotingSystemService.Deletevotetally(votetally.TallyID);
+                    var deleteResult = await CryptographicElectronicVotingSystemService.DeleteVotetally(votetally.TallyID);
 
                     if (deleteResult != null)
                     {
@@ -88,7 +87,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
                 {
                     Severity = NotificationSeverity.Error,
                     Summary = $"Error",
-                    Detail = $"Unable to delete votetally"
+                    Detail = $"Unable to delete Votetally"
                 });
             }
         }
@@ -97,24 +96,24 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         {
             if (args?.Value == "csv")
             {
-                await ElectronicVotingSystemService.ExportvotetalliesToCSV(new Query
+                await CryptographicElectronicVotingSystemService.ExportVotetalliesToCSV(new Query
 {
     Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
     OrderBy = $"{grid0.Query.OrderBy}",
-    Expand = "tallyingcenter,candidate",
+    Expand = "Tallyingcenter,Candidate",
     Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "votetallies");
+}, "Votetallies");
             }
 
             if (args == null || args.Value == "xlsx")
             {
-                await ElectronicVotingSystemService.ExportvotetalliesToExcel(new Query
+                await CryptographicElectronicVotingSystemService.ExportVotetalliesToExcel(new Query
 {
     Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
     OrderBy = $"{grid0.Query.OrderBy}",
-    Expand = "tallyingcenter,candidate",
+    Expand = "Tallyingcenter,Candidate",
     Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "votetallies");
+}, "Votetallies");
             }
         }
     }

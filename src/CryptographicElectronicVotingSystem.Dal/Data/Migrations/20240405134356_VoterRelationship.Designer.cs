@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 {
     [DbContext(typeof(ApplicationIdentityDbContext))]
-    [Migration("20240405063215_VoterRelationship")]
+    [Migration("20240405134356_VoterRelationship")]
     partial class VoterRelationship
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -48,7 +48,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -101,7 +101,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<long?>("VoterId")
+                    b.Property<long>("VoterId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -119,9 +119,10 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
                 {
                     b.Property<long>("VoterID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     b.Property<string>("ApplicationUserId")
@@ -255,18 +256,20 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", "Voter")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", "Voter")
                         .WithOne()
-                        .HasForeignKey("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", "VoterId");
+                        .HasForeignKey("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", "VoterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Voter");
                 });
 
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.voter", b =>
+            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", "ApplicationUser")
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -277,7 +280,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", null)
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -286,7 +289,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", null)
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -295,7 +298,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", null)
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,13 +307,13 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationRole", null)
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", null)
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -319,7 +322,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.Authentication.ApplicationUser", null)
+                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

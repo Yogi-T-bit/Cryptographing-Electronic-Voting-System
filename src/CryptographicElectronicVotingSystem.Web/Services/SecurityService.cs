@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using System.Security.Claims;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Radzen;
 
+using Radzen;
+using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
 namespace CryptographicElectronicVotingSystem.Web.Services
 {
@@ -172,7 +172,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await httpClient.DeleteAsync(uri);
         }
 
-        /*public async Task<ApplicationUser> GetUserById(string id)
+        public async Task<ApplicationUser> GetUserById(string id)
         {
             var uri = new Uri(baseUri, $"ApplicationUsers('{id}')?$expand=Roles");
 
@@ -184,47 +184,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             }
 
             return await response.ReadAsync<ApplicationUser>();
-        }*/
-        
-        public async Task<ApplicationUser> GetUserById(string id)
-        {
-            try
-            {
-                var uri = new Uri(baseUri, $"ApplicationUsers('{id}')?$expand=Roles");
-                var response = await httpClient.GetAsync(uri);
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    // Handle 404 NotFound specifically if needed
-                    return null;
-                }
-                if (!response.IsSuccessStatusCode)
-                {
-                    // Handle other unsuccessful responses
-                    return null;
-                }
-        
-                // Ensure the response body is fully loaded into the buffer.
-                await response.Content.LoadIntoBufferAsync();
-        
-                // Use ReadAsStreamAsync to obtain the stream and then deserialize from the stream.
-                using (var stream = await response.Content.ReadAsStreamAsync())
-                {
-                    // Ensure the stream supports seeking.
-                    if (stream.CanSeek)
-                    {
-                        stream.Seek(0, SeekOrigin.Begin); // Reset position to start.
-                    }
-
-                    return await System.Text.Json.JsonSerializer.DeserializeAsync<ApplicationUser>(stream);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception, return null, or throw a custom exception
-                return null;
-            }
         }
-
 
         public async Task<ApplicationUser> UpdateUser(string id, ApplicationUser user)
         {

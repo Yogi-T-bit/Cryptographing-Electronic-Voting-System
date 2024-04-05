@@ -2,7 +2,7 @@
 
 @attribute [Authorize]
 
-<PageTitle>Edit tallyingcenter</PageTitle>
+<PageTitle>Edit Tallyingcenter</PageTitle>
 <RadzenRow>
     <RadzenColumn SizeMD="9">
     <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)" />
@@ -21,8 +21,8 @@
 </RadzenRow>
 
     <RadzenColumn SizeMD=12>
-        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save tallyingcenter</RadzenAlert>
-        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem.tallyingcenter" Data="@tallyingcenter" Visible="@(tallyingcenter != null && canEdit)" Submit="@FormSubmit">
+        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Tallyingcenter</RadzenAlert>
+        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Data="@tallyingcenter" Visible="@(tallyingcenter != null && canEdit)" Submit="@FormSubmit">
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
                     <RadzenLabel Text="Name" Component="Name" style="width: 100%" />
@@ -38,6 +38,7 @@
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@tallyingcenter.Location" Name="Location" />
+                    <RadzenRequiredValidator Component="Location" Text="Location is required" />
                 </RadzenColumn>
             </RadzenRow>
             <RadzenRow style="margin-bottom: 1rem">
@@ -46,6 +47,7 @@
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
                     <RadzenTextBox style="display: block; width: 100%" @bind-Value="@tallyingcenter.CenterPublicKey" Name="CenterPublicKey" />
+                    <RadzenRequiredValidator Component="CenterPublicKey" Text="CenterPublicKey is required" />
                 </RadzenColumn>
             </RadzenRow>
           <RadzenStack  Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">

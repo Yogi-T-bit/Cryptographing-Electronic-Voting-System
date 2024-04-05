@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,8 +31,8 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         [Inject]
         protected NotificationService NotificationService { get; set; }
 
-        protected IEnumerable<ApplicationRole> roles;
-        protected RadzenDataGrid<ApplicationRole> grid0;
+        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole> roles;
+        protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole> grid0;
         protected string error;
         protected bool errorVisible;
 
@@ -52,7 +51,7 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             roles = await Security.GetRoles();
         }
 
-        protected async Task DeleteClick(ApplicationRole role)
+        protected async Task DeleteClick(CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationRole role)
         {
             try
             {
