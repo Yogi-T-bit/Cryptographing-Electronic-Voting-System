@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptographicElectronicVotingSystem.Dal.Models.Authentication;
+using CryptographicElectronicVotingSystem.Dal.Models.ElectronicVotingSystem;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,11 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Ignore<voter>();
+            builder.Ignore<vote>();
+            builder.Ignore<votetally>();
+            builder.Ignore<candidate>();
+            builder.Ignore<tallyingcenter>();
             
             // Configure the one-to-one relationship between ApplicationUser and Voter
             builder.Entity<ApplicationUser>()

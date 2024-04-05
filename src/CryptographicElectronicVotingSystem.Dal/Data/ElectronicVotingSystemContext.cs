@@ -24,6 +24,15 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Ignore<ApplicationUser>();
+            builder.Ignore<ApplicationRole>();
+            builder.Ignore<IdentityUser>();
+            builder.Ignore<IdentityRole>();
+            builder.Ignore<IdentityUserRole<string>>();
+            builder.Ignore<IdentityUserClaim<string>>();
+            builder.Ignore<IdentityUserLogin<string>>();
+            builder.Ignore<IdentityUserToken<string>>();
+            builder.Ignore<IdentityRoleClaim<string>>();
             
             // voter as a foreign key to ApplicationUser
             builder.Entity<voter>()
