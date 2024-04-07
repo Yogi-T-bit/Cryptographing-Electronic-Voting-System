@@ -1,0 +1,114 @@
+@page "/candidates"
+
+@attribute [Authorize]
+<PageTitle>Candidates</PageTitle>
+<RadzenStack>
+    <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenText Text="Candidates" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenColumn SizeMD=12>
+            <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
+                            Data="@candidates" TItem="Candidate" RowSelect="@EditRow">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Candidate" Property="CandidateID" Title="Candidate I D">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Candidate" Property="Name" Title="Name">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Candidate" Property="Party" Title="Party">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Candidate" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        <Template Context="candidate">
+
+                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                                          Shade="Shade.Lighter" Variant="Variant.Flat"
+                                          Click=@(args => GridDeleteButtonClick(args, candidate)) @onclick:stopPropagation="true" />
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenStack>
+
+
+<RadzenPanel Class="rz-my-10 rz-mx-auto" Style="width: 700px;" >
+    <HeaderTemplate>
+        <RadzenText TextStyle="TextStyle.H6" Class="rz-display-flex rz-align-items-center rz-m-0">
+            <RadzenIcon Icon="account_box" class="rz-mr-1" /><b>Candidates</b>
+        </RadzenText>
+    </HeaderTemplate>
+    <ChildContent>
+        <RadzenCard  class="rz-mt-4">
+            <RadzenDataList Data="@candidates" TItem="Candidate">
+                <Template Context="candidate">
+                    <RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 420px">
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                            <RadzenImage Path="@candidate.Name" Style="width: 100px; height: 100px; border-radius: 50%;" />
+                            <RadzenStack Gap="0">
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Employee</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@(candidate.Name)</b></RadzenText>
+                                <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Company</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body1"><b>@candidate.Name</b></RadzenText>
+                            </RadzenStack>
+                        </RadzenStack>
+                        <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                            <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Delivery Information</strong></RadzenText>
+                            <RadzenRow RowGap="0">
+                                <RadzenColumn SizeSM="4">
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Country</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@(candidate?.Name)</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">City</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@(candidate?.Name)</b></RadzenText>
+                                </RadzenColumn>
+                                <RadzenColumn SizeSM="8">
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Ship name</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@(candidate?.Name)</b></RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Freight</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", candidate?.Name)</b></RadzenText>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </RadzenCard>
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0">
+                            <div class="rz-p-12 rz-text-align-center">
+                                <RadzenButton Text="Dialog with inline Blazor content" ButtonStyle="ButtonStyle.Secondary" Click="@(async () => await ShowInlineDialog(candidate))" />
+                            </div>
+                        </RadzenStack>
+                    </RadzenCard>
+                </Template>
+            </RadzenDataList>
+        </RadzenCard>
+    </ChildContent>
+    <SummaryTemplate>
+        <RadzenCard class="rz-mt-4">
+            <b>@candidates.Count() Orders</b>
+        </RadzenCard>
+    </SummaryTemplate>
+</RadzenPanel>
+
+
+@code {
+
+    async Task ShowInlineDialog(Candidate candidate)
+    {
+        var result = await DialogService.OpenAsync("Vote Confirmation", ds =>
+            @<RadzenStack Gap="1.5rem">
+                <p>Confirm Vote <b>@candidate.Name</b>?</p>
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                    <RadzenStack Orientation="Orientation.Horizontal">
+                        <RadzenButton Text="Ok" Click="() => ds.Close(true)" Style="width: 80px;"/>
+                        <RadzenButton Text="Cancel" Click="() => ds.Close(false)" ButtonStyle="ButtonStyle.Light"/>
+                    </RadzenStack>
+                    <RadzenButton Text="Vote" Click="(() => { ds.Close(true); ConfirmVote(candidate); })" ButtonStyle="ButtonStyle.Secondary"/>
+        </RadzenStack>
+        </RadzenStack>);
+    }
+
+}
