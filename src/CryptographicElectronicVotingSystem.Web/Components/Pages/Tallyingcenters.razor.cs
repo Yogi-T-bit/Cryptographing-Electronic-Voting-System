@@ -38,22 +38,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> grid0;
 
-        protected string search = "";
-
         [Inject]
         protected SecurityService Security { get; set; }
-
-        protected async Task Search(ChangeEventArgs args)
-        {
-            search = $"{args.Value}";
-
-            await grid0.GoToPage(0);
-
-            tallyingcenters = await CryptographicElectronicVotingSystemService.GetTallyingcenters(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Location.Contains(@0) || i.CenterPublicKey.Contains(@0)", FilterParameters = new object[] { search } });
-        }
         protected override async Task OnInitializedAsync()
         {
-            tallyingcenters = await CryptographicElectronicVotingSystemService.GetTallyingcenters(new Query { Filter = $@"i => i.Name.Contains(@0) || i.Location.Contains(@0) || i.CenterPublicKey.Contains(@0)", FilterParameters = new object[] { search } });
+            tallyingcenters = await CryptographicElectronicVotingSystemService.GetTallyingcenters();
         }
 
         protected async Task AddButtonClick(MouseEventArgs args)
@@ -62,9 +51,9 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             await grid0.Reload();
         }
 
-        protected async Task EditRow(DataGridRowMouseEventArgs<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> args)
+        protected async Task EditRow(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter args)
         {
-            await DialogService.OpenAsync<EditTallyingcenter>("Edit Tallyingcenter", new Dictionary<string, object> { {"CenterID", args.Data.CenterID} });
+            await DialogService.OpenAsync<EditTallyingcenter>("Edit Tallyingcenter", new Dictionary<string, object> { {"CenterID", args.CenterID} });
         }
 
         protected async Task GridDeleteButtonClick(MouseEventArgs args, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter tallyingcenter)
@@ -89,31 +78,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
                     Summary = $"Error",
                     Detail = $"Unable to delete Tallyingcenter"
                 });
-            }
-        }
-
-        protected async Task ExportClick(RadzenSplitButtonItem args)
-        {
-            if (args?.Value == "csv")
-            {
-                await CryptographicElectronicVotingSystemService.ExportTallyingcentersToCSV(new Query
-{
-    Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
-    OrderBy = $"{grid0.Query.OrderBy}",
-    Expand = "",
-    Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "Tallyingcenters");
-            }
-
-            if (args == null || args.Value == "xlsx")
-            {
-                await CryptographicElectronicVotingSystemService.ExportTallyingcentersToExcel(new Query
-{
-    Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
-    OrderBy = $"{grid0.Query.OrderBy}",
-    Expand = "",
-    Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "Tallyingcenters");
             }
         }
     }

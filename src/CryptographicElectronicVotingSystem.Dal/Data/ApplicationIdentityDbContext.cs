@@ -27,17 +27,6 @@ namespace CryptographicElectronicVotingSystem.Dal.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
-            // exclude the following tables from the identity model (vote, Votetally, candidate, Tallyingcenter)
-            builder.Ignore<Vote>();
-            builder.Ignore<Votetally>();
-            builder.Ignore<Candidate>();
-            builder.Ignore<Tallyingcenter>();
-            
-            builder.Entity<ApplicationUser>()
-                .HasOne(u => u.Voter) // ApplicationUser has one Voter
-                .WithOne() // Assuming no navigation property back from Voter to ApplicationUser
-                .HasForeignKey<ApplicationUser>(u => u.VoterId); // ApplicationUser uses VoterId as foreign key
 
             builder.Entity<ApplicationUser>()
                    .HasMany(u => u.Roles)

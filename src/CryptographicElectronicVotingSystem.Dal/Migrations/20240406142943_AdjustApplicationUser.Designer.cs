@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
+namespace CryptographicElectronicVotingSystem.Dal.Migrations
 {
     [DbContext(typeof(ApplicationIdentityDbContext))]
-    [Migration("20240405134356_VoterRelationship")]
-    partial class VoterRelationship
+    [Migration("20240406142943_AdjustApplicationUser")]
+    partial class AdjustApplicationUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,14 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -91,6 +99,10 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
@@ -101,9 +113,6 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<long>("VoterId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -113,45 +122,7 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("VoterId")
-                        .IsUnique();
-
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
-                {
-                    b.Property<long>("VoterID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("HasVoted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsAuthorized")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("VoterPublicKey")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("VoterID");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("voters");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -254,28 +225,6 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", b =>
-                {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", "Voter")
-                        .WithOne()
-                        .HasForeignKey("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", "VoterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Voter");
-                });
-
-            modelBuilder.Entity("CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter", b =>
-                {
-                    b.HasOne("CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

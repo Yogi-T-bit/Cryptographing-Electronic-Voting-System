@@ -13,12 +13,15 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronic
         public int CenterID { get; set; }
 
         [Required]
+        [ConcurrencyCheck]
         public string Name { get; set; }
 
         [Required]
+        [ConcurrencyCheck]
         public string Location { get; set; }
 
         [Required]
+        [ConcurrencyCheck]
         public string CenterPublicKey { get; set; }
 
         public ICollection<Votetally> Votetallies { get; set; }

@@ -9,13 +9,15 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronic
     public partial class Candidate
     {
         [Key]
-        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CandidateID { get; set; }
 
         [Required]
+        [ConcurrencyCheck]
         public string Name { get; set; }
 
         [Required]
+        [ConcurrencyCheck]
         public string Party { get; set; }
 
         public ICollection<Vote> Votes { get; set; }

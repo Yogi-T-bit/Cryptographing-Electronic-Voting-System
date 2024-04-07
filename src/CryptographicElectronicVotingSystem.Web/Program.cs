@@ -1,11 +1,10 @@
-using Radzen;
-using CryptographicElectronicVotingSystem.Web.Components;
-using Microsoft.EntityFrameworkCore;
 using CryptographicElectronicVotingSystem.Dal.Data;
-using Microsoft.AspNetCore.Identity;
 using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
-using CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem;
-
+using Radzen;
+using Microsoft.EntityFrameworkCore;
+using CryptographicElectronicVotingSystem.Web.Components;
+using CryptographicElectronicVotingSystem.Web.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -16,18 +15,17 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents().AddHubOpt
 builder.Services.AddControllers();
 builder.Services.AddRadzenComponents();
 builder.Services.AddHttpClient();
-builder.Services.AddDbContext<CryptographicElectronicVotingSystem.Dal.Data.CryptographicElectronicVotingSystemContext>(options =>
+builder.Services.AddDbContext<CryptographicElectronicVotingSystemContext>(options =>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection")));
 });
-builder.Services.AddDbContext<CryptographicElectronicVotingSystem.Dal.Data.ApplicationIdentityDbContext>(options =>
+builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("ElectronicVotingSystemConnection")));
 });
 
-
-builder.Services.AddScoped<CryptographicElectronicVotingSystem.Web.Services.CryptographicElectronicVotingSystemService>();
-builder.Services.AddScoped<CryptographicElectronicVotingSystem.Web.Services.SecurityService>();
+builder.Services.AddScoped<CryptographicElectronicVotingSystemService>();
+builder.Services.AddScoped<SecurityService>();
 
 builder.Services.AddHttpClient("CryptographicElectronicVotingSystem").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseCookies = false }).AddHeaderPropagation(o => o.Headers.Add("Cookie"));
 builder.Services.AddHeaderPropagation(o => o.Headers.Add("Cookie"));
@@ -45,7 +43,16 @@ builder.Services.AddControllers().AddOData(o =>
     oDataBuilder.EntitySet<ApplicationRole>("ApplicationRoles");
     o.AddRouteComponents("odata/Identity", oDataBuilder.GetEdmModel()).Count().Filter().OrderBy().Expand().Select().SetMaxTop(null).TimeZone = TimeZoneInfo.Utc;
 });
-builder.Services.AddScoped<AuthenticationStateProvider, CryptographicElectronicVotingSystem.Web.Services.ApplicationAuthenticationStateProvider>();
+
+builder.Services.AddScoped<AuthenticationStateProvider, ApplicationAuthenticationStateProvider>();
+
+builder.Services.AddScoped<FakeDataGenerator>(provider => new FakeDataGenerator(
+    provider.GetRequiredService<UserManager<ApplicationUser>>(),
+    provider.GetRequiredService<RoleManager<ApplicationRole>>(),
+    provider.GetRequiredService<ApplicationIdentityDbContext>(),
+    provider.GetRequiredService<CryptographicElectronicVotingSystemContext>()
+));
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -63,5 +70,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
-//app.Services.CreateScope().ServiceProvider.GetRequiredService<CryptographicElectronicVotingSystem.Dal.Data.ApplicationIdentityDbContext>().Database.Migrate();
+
 app.Run();

@@ -43,6 +43,9 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected bool errorVisible;
         protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate candidate;
 
+        [Inject]
+        protected SecurityService Security { get; set; }
+
         protected async Task FormSubmit()
         {
             try
@@ -52,8 +55,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             }
             catch (Exception ex)
             {
-                hasChanges = ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException;
-                canEdit = !(ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException);
                 errorVisible = true;
             }
         }
@@ -61,23 +62,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected async Task CancelButtonClick(MouseEventArgs args)
         {
             DialogService.Close(null);
-        }
-
-
-        protected bool hasChanges = false;
-        protected bool canEdit = true;
-
-        [Inject]
-        protected SecurityService Security { get; set; }
-
-
-        protected async Task ReloadButtonClick(MouseEventArgs args)
-        {
-           CryptographicElectronicVotingSystemService.Reset();
-            hasChanges = false;
-            canEdit = true;
-
-            candidate = await CryptographicElectronicVotingSystemService.GetCandidateByCandidateId(CandidateID);
         }
     }
 }

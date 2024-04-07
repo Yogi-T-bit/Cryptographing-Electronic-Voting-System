@@ -8,7 +8,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
-
+using CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Dal.Data;
 
 namespace CryptographicElectronicVotingSystem.Web.Services
@@ -23,7 +23,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
            }
         }
 
-        private readonly CryptographicElectronicVotingSystemContext context;
+        protected readonly CryptographicElectronicVotingSystemContext context;
         private readonly NavigationManager navigationManager;
 
         public CryptographicElectronicVotingSystemService(CryptographicElectronicVotingSystemContext context, NavigationManager navigationManager)
@@ -78,9 +78,9 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             navigationManager.NavigateTo(query != null ? query.ToUrl($"export/CryptographicElectronicVotingSystem/candidates/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/CryptographicElectronicVotingSystem/candidates/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
         }
 
-        partial void OnCandidatesRead(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> items);
+        partial void OnCandidatesRead(ref IQueryable<Candidate> items);
 
-        public async Task<IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate>> GetCandidates(Query query = null)
+        public async Task<IQueryable<Candidate>> GetCandidates(Query query = null)
         {
             var items = Context.Candidates.AsQueryable();
 
@@ -104,11 +104,11 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(items);
         }
 
-        partial void OnCandidateGet(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
-        partial void OnGetCandidateByCandidateId(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> items);
+        partial void OnCandidateGet(Candidate item);
+        partial void OnGetCandidateByCandidateId(ref IQueryable<Candidate> items);
 
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> GetCandidateByCandidateId(int candidateid)
+        public async Task<Candidate> GetCandidateByCandidateId(int candidateid)
         {
             var items = Context.Candidates
                               .AsNoTracking()
@@ -124,10 +124,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(itemToReturn);
         }
 
-        partial void OnCandidateCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
-        partial void OnAfterCandidateCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
+        partial void OnCandidateCreated(Candidate item);
+        partial void OnAfterCandidateCreated(Candidate item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> CreateCandidate(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate candidate)
+        public async Task<Candidate> CreateCandidate(Candidate candidate)
         {
             OnCandidateCreated(candidate);
 
@@ -156,7 +156,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return candidate;
         }
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> CancelCandidateChanges(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item)
+        public async Task<Candidate> CancelCandidateChanges(Candidate item)
         {
             var entityToCancel = Context.Entry(item);
             if (entityToCancel.State == EntityState.Modified)
@@ -168,10 +168,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return item;
         }
 
-        partial void OnCandidateUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
-        partial void OnAfterCandidateUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
+        partial void OnCandidateUpdated(Candidate item);
+        partial void OnAfterCandidateUpdated(Candidate item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> UpdateCandidate(int candidateid, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate candidate)
+        public async Task<Candidate> UpdateCandidate(int candidateid, Candidate candidate)
         {
             OnCandidateUpdated(candidate);
 
@@ -195,14 +195,13 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return candidate;
         }
 
-        partial void OnCandidateDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
-        partial void OnAfterCandidateDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate item);
+        partial void OnCandidateDeleted(Candidate item);
+        partial void OnAfterCandidateDeleted(Candidate item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> DeleteCandidate(int candidateid)
+        public async Task<Candidate> DeleteCandidate(int candidateid)
         {
             var itemToDelete = Context.Candidates
                               .Where(i => i.CandidateID == candidateid)
-                              .Include(i => i.Votes)
                               .Include(i => i.Votetallies)
                               .FirstOrDefault();
 
@@ -241,9 +240,9 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             navigationManager.NavigateTo(query != null ? query.ToUrl($"export/CryptographicElectronicVotingSystem/tallyingcenters/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/CryptographicElectronicVotingSystem/tallyingcenters/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
         }
 
-        partial void OnTallyingcentersRead(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> items);
+        partial void OnTallyingcentersRead(ref IQueryable<Tallyingcenter> items);
 
-        public async Task<IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter>> GetTallyingcenters(Query query = null)
+        public async Task<IQueryable<Tallyingcenter>> GetTallyingcenters(Query query = null)
         {
             var items = Context.Tallyingcenters.AsQueryable();
 
@@ -267,11 +266,11 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(items);
         }
 
-        partial void OnTallyingcenterGet(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
-        partial void OnGetTallyingcenterByCenterId(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> items);
+        partial void OnTallyingcenterGet(Tallyingcenter item);
+        partial void OnGetTallyingcenterByCenterId(ref IQueryable<Tallyingcenter> items);
 
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> GetTallyingcenterByCenterId(int centerid)
+        public async Task<Tallyingcenter> GetTallyingcenterByCenterId(int centerid)
         {
             var items = Context.Tallyingcenters
                               .AsNoTracking()
@@ -287,10 +286,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(itemToReturn);
         }
 
-        partial void OnTallyingcenterCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
-        partial void OnAfterTallyingcenterCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
+        partial void OnTallyingcenterCreated(Tallyingcenter item);
+        partial void OnAfterTallyingcenterCreated(Tallyingcenter item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> CreateTallyingcenter(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter tallyingcenter)
+        public async Task<Tallyingcenter> CreateTallyingcenter(Tallyingcenter tallyingcenter)
         {
             OnTallyingcenterCreated(tallyingcenter);
 
@@ -319,7 +318,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return tallyingcenter;
         }
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> CancelTallyingcenterChanges(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item)
+        public async Task<Tallyingcenter> CancelTallyingcenterChanges(Tallyingcenter item)
         {
             var entityToCancel = Context.Entry(item);
             if (entityToCancel.State == EntityState.Modified)
@@ -331,10 +330,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return item;
         }
 
-        partial void OnTallyingcenterUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
-        partial void OnAfterTallyingcenterUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
+        partial void OnTallyingcenterUpdated(Tallyingcenter item);
+        partial void OnAfterTallyingcenterUpdated(Tallyingcenter item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> UpdateTallyingcenter(int centerid, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter tallyingcenter)
+        public async Task<Tallyingcenter> UpdateTallyingcenter(int centerid, Tallyingcenter tallyingcenter)
         {
             OnTallyingcenterUpdated(tallyingcenter);
 
@@ -358,10 +357,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return tallyingcenter;
         }
 
-        partial void OnTallyingcenterDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
-        partial void OnAfterTallyingcenterDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter item);
+        partial void OnTallyingcenterDeleted(Tallyingcenter item);
+        partial void OnAfterTallyingcenterDeleted(Tallyingcenter item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter> DeleteTallyingcenter(int centerid)
+        public async Task<Tallyingcenter> DeleteTallyingcenter(int centerid)
         {
             var itemToDelete = Context.Tallyingcenters
                               .Where(i => i.CenterID == centerid)
@@ -403,9 +402,9 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             navigationManager.NavigateTo(query != null ? query.ToUrl($"export/CryptographicElectronicVotingSystem/voters/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/CryptographicElectronicVotingSystem/voters/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
         }
 
-        partial void OnVotersRead(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> items);
+        partial void OnVotersRead(ref IQueryable<Voter> items);
 
-        public async Task<IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter>> GetVoters(Query query = null)
+        public async Task<IQueryable<Voter>> GetVoters(Query query = null)
         {
             var items = Context.Voters.AsQueryable();
 
@@ -429,11 +428,11 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(items);
         }
 
-        partial void OnVoterGet(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
-        partial void OnGetVoterByVoterId(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> items);
+        partial void OnVoterGet(Voter item);
+        partial void OnGetVoterByVoterId(ref IQueryable<Voter> items);
 
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> GetVoterByVoterId(long voterid)
+        public async Task<Voter> GetVoterByVoterId(long voterid)
         {
             var items = Context.Voters
                               .AsNoTracking()
@@ -449,10 +448,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(itemToReturn);
         }
 
-        partial void OnVoterCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
-        partial void OnAfterVoterCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
+        partial void OnVoterCreated(Voter item);
+        partial void OnAfterVoterCreated(Voter item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> CreateVoter(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter voter)
+        public async Task<Voter> CreateVoter(Voter voter)
         {
             OnVoterCreated(voter);
 
@@ -481,7 +480,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return voter;
         }
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> CancelVoterChanges(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item)
+        public async Task<Voter> CancelVoterChanges(Voter item)
         {
             var entityToCancel = Context.Entry(item);
             if (entityToCancel.State == EntityState.Modified)
@@ -493,10 +492,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return item;
         }
 
-        partial void OnVoterUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
-        partial void OnAfterVoterUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
+        partial void OnVoterUpdated(Voter item);
+        partial void OnAfterVoterUpdated(Voter item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> UpdateVoter(long voterid, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter voter)
+        public async Task<Voter> UpdateVoter(long voterid, Voter voter)
         {
             OnVoterUpdated(voter);
 
@@ -520,10 +519,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return voter;
         }
 
-        partial void OnVoterDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
-        partial void OnAfterVoterDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter item);
+        partial void OnVoterDeleted(Voter item);
+        partial void OnAfterVoterDeleted(Voter item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> DeleteVoter(long voterid)
+        public async Task<Voter> DeleteVoter(long voterid)
         {
             var itemToDelete = Context.Voters
                               .Where(i => i.VoterID == voterid)
@@ -565,13 +564,12 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             navigationManager.NavigateTo(query != null ? query.ToUrl($"export/CryptographicElectronicVotingSystem/votes/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/CryptographicElectronicVotingSystem/votes/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
         }
 
-        partial void OnVotesRead(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> items);
+        partial void OnVotesRead(ref IQueryable<Vote> items);
 
-        public async Task<IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote>> GetVotes(Query query = null)
+        public async Task<IQueryable<Vote>> GetVotes(Query query = null)
         {
             var items = Context.Votes.AsQueryable();
 
-            items = items.Include(i => i.Candidate);
             items = items.Include(i => i.Voter);
 
             if (query != null)
@@ -593,17 +591,16 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(items);
         }
 
-        partial void OnVoteGet(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
-        partial void OnGetVoteByVoteId(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> items);
+        partial void OnVoteGet(Vote item);
+        partial void OnGetVoteByVoteId(ref IQueryable<Vote> items);
 
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> GetVoteByVoteId(int voteid)
+        public async Task<Vote> GetVoteByVoteId(int voteid)
         {
             var items = Context.Votes
                               .AsNoTracking()
                               .Where(i => i.VoteID == voteid);
 
-            items = items.Include(i => i.Candidate);
             items = items.Include(i => i.Voter);
  
             OnGetVoteByVoteId(ref items);
@@ -615,10 +612,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(itemToReturn);
         }
 
-        partial void OnVoteCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
-        partial void OnAfterVoteCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
+        partial void OnVoteCreated(Vote item);
+        partial void OnAfterVoteCreated(Vote item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> CreateVote(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote vote)
+        public async Task<Vote> CreateVote(Vote vote)
         {
             OnVoteCreated(vote);
 
@@ -647,7 +644,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return vote;
         }
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> CancelVoteChanges(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item)
+        public async Task<Vote> CancelVoteChanges(Vote item)
         {
             var entityToCancel = Context.Entry(item);
             if (entityToCancel.State == EntityState.Modified)
@@ -659,10 +656,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return item;
         }
 
-        partial void OnVoteUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
-        partial void OnAfterVoteUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
+        partial void OnVoteUpdated(Vote item);
+        partial void OnAfterVoteUpdated(Vote item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> UpdateVote(int voteid, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote vote)
+        public async Task<Vote> UpdateVote(int voteid, Vote vote)
         {
             OnVoteUpdated(vote);
 
@@ -686,10 +683,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return vote;
         }
 
-        partial void OnVoteDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
-        partial void OnAfterVoteDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote item);
+        partial void OnVoteDeleted(Vote item);
+        partial void OnAfterVoteDeleted(Vote item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> DeleteVote(int voteid)
+        public async Task<Vote> DeleteVote(int voteid)
         {
             var itemToDelete = Context.Votes
                               .Where(i => i.VoteID == voteid)
@@ -730,9 +727,9 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             navigationManager.NavigateTo(query != null ? query.ToUrl($"export/CryptographicElectronicVotingSystem/votetallies/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/CryptographicElectronicVotingSystem/votetallies/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
         }
 
-        partial void OnVotetalliesRead(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> items);
+        partial void OnVotetalliesRead(ref IQueryable<Votetally> items);
 
-        public async Task<IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally>> GetVotetallies(Query query = null)
+        public async Task<IQueryable<Votetally>> GetVotetallies(Query query = null)
         {
             var items = Context.Votetallies.AsQueryable();
 
@@ -758,11 +755,11 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(items);
         }
 
-        partial void OnVotetallyGet(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
-        partial void OnGetVotetallyByTallyId(ref IQueryable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> items);
+        partial void OnVotetallyGet(Votetally item);
+        partial void OnGetVotetallyByTallyId(ref IQueryable<Votetally> items);
 
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> GetVotetallyByTallyId(int tallyid)
+        public async Task<Votetally> GetVotetallyByTallyId(int tallyid)
         {
             var items = Context.Votetallies
                               .AsNoTracking()
@@ -780,10 +777,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return await Task.FromResult(itemToReturn);
         }
 
-        partial void OnVotetallyCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
-        partial void OnAfterVotetallyCreated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
+        partial void OnVotetallyCreated(Votetally item);
+        partial void OnAfterVotetallyCreated(Votetally item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> CreateVotetally(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally votetally)
+        public async Task<Votetally> CreateVotetally(Votetally votetally)
         {
             OnVotetallyCreated(votetally);
 
@@ -812,7 +809,7 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return votetally;
         }
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> CancelVotetallyChanges(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item)
+        public async Task<Votetally> CancelVotetallyChanges(Votetally item)
         {
             var entityToCancel = Context.Entry(item);
             if (entityToCancel.State == EntityState.Modified)
@@ -824,10 +821,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return item;
         }
 
-        partial void OnVotetallyUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
-        partial void OnAfterVotetallyUpdated(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
+        partial void OnVotetallyUpdated(Votetally item);
+        partial void OnAfterVotetallyUpdated(Votetally item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> UpdateVotetally(int tallyid, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally votetally)
+        public async Task<Votetally> UpdateVotetally(int tallyid, Votetally votetally)
         {
             OnVotetallyUpdated(votetally);
 
@@ -851,10 +848,10 @@ namespace CryptographicElectronicVotingSystem.Web.Services
             return votetally;
         }
 
-        partial void OnVotetallyDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
-        partial void OnAfterVotetallyDeleted(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally item);
+        partial void OnVotetallyDeleted(Votetally item);
+        partial void OnAfterVotetallyDeleted(Votetally item);
 
-        public async Task<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally> DeleteVotetally(int tallyid)
+        public async Task<Votetally> DeleteVotetally(int tallyid)
         {
             var itemToDelete = Context.Votetallies
                               .Where(i => i.TallyID == tallyid)

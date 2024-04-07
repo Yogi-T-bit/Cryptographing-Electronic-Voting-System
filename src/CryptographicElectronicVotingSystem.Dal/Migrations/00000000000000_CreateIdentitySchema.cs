@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
+#nullable disable
+
+namespace CryptographicElectronicVotingSystem.Dal.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

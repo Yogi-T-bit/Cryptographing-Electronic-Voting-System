@@ -12,18 +12,21 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronic
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VoteID { get; set; }
 
+        [ConcurrencyCheck]
         public long? VoterID { get; set; }
 
         public Voter Voter { get; set; }
 
-        public int? CandidateID { get; set; }
-
-        public Candidate Candidate { get; set; }
-
+        [ConcurrencyCheck]
         public DateTime? Timestamp { get; set; }
 
         [Required]
-        public string VoteProof { get; set; }
+        [ConcurrencyCheck]
+        public string VotePublicKey { get; set; }
+
+        [Required]
+        [ConcurrencyCheck]
+        public string EncryptedVote { get; set; }
 
     }
 }

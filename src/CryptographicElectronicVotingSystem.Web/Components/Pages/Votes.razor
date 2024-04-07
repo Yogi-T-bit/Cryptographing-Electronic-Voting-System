@@ -1,7 +1,6 @@
 @page "/votes"
 
 @attribute [Authorize]
-
 <PageTitle>Votes</PageTitle>
 <RadzenStack>
     <RadzenRow AlignItems="AlignItems.Center">
@@ -10,29 +9,24 @@
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="6">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
-                <RadzenSplitButton Icon="get_app" Text="Export" Click="@ExportClick" Variant="Variant.Flat" Shade="Shade.Lighter">
-                    <RadzenSplitButtonItem Text="Excel" Value="xlsx" />
-                    <RadzenSplitButtonItem Text="CSV" Value="csv" />
-                </RadzenSplitButton>
                 <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
             </RadzenStack>
         </RadzenColumn>
     </RadzenRow>
-    <RadzenTextBox Placeholder="Search ..." style="display: block; width: 100%" @oninput="@Search" aria-label="Search by all string columns" />
     <RadzenRow>
       <RadzenColumn SizeMD=12>
         <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
-            Data="@votes" TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" RowDoubleClick="@EditRow">
+            Data="@votes" TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" RowSelect="@EditRow">
             <Columns>
                 <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="VoteID" Title="Vote I D">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="Voter.FullName" Title="Voter">
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="Candidate.Name" Title="Candidate">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="Voter.Email" Title="Voter">
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="Timestamp" Title="Timestamp">
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="VoteProof" Title="Vote Proof">
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="VotePublicKey" Title="Vote Public Key">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Property="EncryptedVote" Title="Encrypted Vote">
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                     <Template Context="vote">

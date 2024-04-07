@@ -1,34 +1,17 @@
 @page "/edit-votetally"
 
 @attribute [Authorize]
-
 <PageTitle>Edit Votetally</PageTitle>
-<RadzenRow>
-    <RadzenColumn SizeMD="9">
-    <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)" />
-    </RadzenColumn>
-    <RadzenColumn SizeMD="3">
-    <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-bottom: 20px" Text="Close" Visible="@(!canEdit)" Click="@CancelButtonClick" />
-    </RadzenColumn>
-</RadzenRow>
-<RadzenRow>
-    <RadzenColumn SizeMD="9">
-    <RadzenLabel style="font-weight: bold" Text="Another user has made conflicting changes to one or more of the fields you have modified. Please reload." Visible="@hasChanges" />
-    </RadzenColumn>
-    <RadzenColumn SizeMD="3">
-    <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="autorenew" style="margin-bottom: 20px" Text="Reload" Visible="@hasChanges" Click="@ReloadButtonClick" />
-    </RadzenColumn>
-</RadzenRow>
 
     <RadzenColumn SizeMD=12>
         <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Votetally</RadzenAlert>
-        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally" Data="@votetally" Visible="@(votetally != null && canEdit)" Submit="@FormSubmit">
+        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Votetally" Data="@votetally" Visible="@(votetally != null)" Submit="@FormSubmit">
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
                     <RadzenLabel Text="Tallyingcenter" Component="Tallyingcenter" style="width: 100%" />
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
-                    <RadzenDropDownDataGrid Data="@tallyingcentersForCenterID" TextProperty="Name" ValueProperty="CenterID" AllowClear=true
+                    <RadzenDropDown Data="@tallyingcentersForCenterID" TextProperty="Name" ValueProperty="CenterID" AllowClear=true
                          Placeholder="Choose Tallyingcenter" style="display: block; width: 100%" @bind-Value="@votetally.CenterID" Name="CenterID"
                            />
                 </RadzenColumn>
@@ -38,7 +21,7 @@
                     <RadzenLabel Text="Candidate" Component="Candidate" style="width: 100%" />
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
-                    <RadzenDropDownDataGrid Data="@candidatesForCandidateID" TextProperty="Name" ValueProperty="CandidateID" AllowClear=true
+                    <RadzenDropDown Data="@candidatesForCandidateID" TextProperty="Name" ValueProperty="CandidateID" AllowClear=true
                          Placeholder="Choose Candidate" style="display: block; width: 100%" @bind-Value="@votetally.CandidateID" Name="CandidateID"
                            />
                 </RadzenColumn>

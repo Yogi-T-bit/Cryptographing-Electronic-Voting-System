@@ -1,37 +1,11 @@
 @page "/edit-candidate"
 
 @attribute [Authorize]
-
 <PageTitle>Edit Candidate</PageTitle>
-<RadzenRow>
-    <RadzenColumn SizeMD="9">
-    <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)" />
-    </RadzenColumn>
-    <RadzenColumn SizeMD="3">
-    <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-bottom: 20px" Text="Close" Visible="@(!canEdit)" Click="@CancelButtonClick" />
-    </RadzenColumn>
-</RadzenRow>
-<RadzenRow>
-    <RadzenColumn SizeMD="9">
-    <RadzenLabel style="font-weight: bold" Text="Another user has made conflicting changes to one or more of the fields you have modified. Please reload." Visible="@hasChanges" />
-    </RadzenColumn>
-    <RadzenColumn SizeMD="3">
-    <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="autorenew" style="margin-bottom: 20px" Text="Reload" Visible="@hasChanges" Click="@ReloadButtonClick" />
-    </RadzenColumn>
-</RadzenRow>
 
     <RadzenColumn SizeMD=12>
         <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save Candidate</RadzenAlert>
-        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate" Data="@candidate" Visible="@(candidate != null && canEdit)" Submit="@FormSubmit">
-            <RadzenRow style="margin-bottom: 1rem">
-                <RadzenColumn SizeMD="3">
-                    <RadzenLabel Text="Candidate I D" Component="CandidateID" style="width: 100%" />
-                </RadzenColumn>
-                <RadzenColumn SizeMD="9">
-                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@candidate.CandidateID" Name="CandidateID" />
-                    <RadzenRequiredValidator Component="CandidateID" Text="CandidateID is required" />
-                </RadzenColumn>
-            </RadzenRow>
+        <RadzenTemplateForm TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate" Data="@candidate" Visible="@(candidate != null)" Submit="@FormSubmit">
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
                     <RadzenLabel Text="Name" Component="Name" style="width: 100%" />

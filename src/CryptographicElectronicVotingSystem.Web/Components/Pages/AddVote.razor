@@ -20,11 +20,7 @@
                 <RadzenColumn SizeMD="3">
                     <RadzenLabel Text="Candidate" Component="Candidate" style="width: 100%" />
                 </RadzenColumn>
-                <RadzenColumn SizeMD="9">
-                    <RadzenDropDownDataGrid Data="@candidatesForCandidateID" TextProperty="Name" ValueProperty="CandidateID" AllowClear=true
-                         Placeholder="Choose Candidate" style="display: block; width: 100%" @bind-Value="@vote.CandidateID" Name="CandidateID"
-                           />
-                </RadzenColumn>
+
             </RadzenRow>
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
@@ -36,11 +32,11 @@
             </RadzenRow>
             <RadzenRow style="margin-bottom: 1rem">
                 <RadzenColumn SizeMD="3">
-                    <RadzenLabel Text="Vote Proof" Component="VoteProof" style="width: 100%" />
+                    <RadzenLabel Text="Vote Proof" Component="VotePublicKey" style="width: 100%" />
                 </RadzenColumn>
                 <RadzenColumn SizeMD="9">
-                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@vote.VoteProof" Name="VoteProof" />
-                    <RadzenRequiredValidator Component="VoteProof" Text="VoteProof is required" />
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@vote.VotePublicKey" Name="VotePublicKey" />
+                    <RadzenRequiredValidator Component="VotePublicKey" Text="VotePublicKey is required" />
                 </RadzenColumn>
             </RadzenRow>
           <RadzenStack  Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">

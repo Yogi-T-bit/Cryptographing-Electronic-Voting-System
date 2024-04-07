@@ -10,26 +10,33 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronic
     public partial class Voter
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public long VoterID { get; set; }
 
-        public string FullName { get; set; }
-
+        [Required]
+        [ConcurrencyCheck]
         public string Email { get; set; }
 
+        [Required]
+        [ConcurrencyCheck]
+        public string LastName { get; set; }
+
+        [Required]
+        [ConcurrencyCheck]
+        public string FirstName { get; set; }
+
+        [ConcurrencyCheck]
         public bool IsAuthorized { get; set; }
 
-        public bool HasVoted { get; set; }
+        [ConcurrencyCheck]
+        public bool? HasVoted { get; set; }
 
-        public string VoterPublicKey { get; set; }
+        [ConcurrencyCheck]
+        public string? VoterPrivateKey { get; set; }
+
+        [ConcurrencyCheck]
+        public string UserId { get; set; }
 
         public ICollection<Vote> Votes { get; set; }
-        
-        // Add a foreign key property for ApplicationUser
-        public string ApplicationUserId { get; set; }
-
-        // Navigation property to ApplicationUser
-        [ForeignKey("ApplicationUserId")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

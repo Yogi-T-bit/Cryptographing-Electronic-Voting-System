@@ -16,7 +16,7 @@ using CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity;
 
 namespace CryptographicElectronicVotingSystem.Web.Services
 {
-    public partial class SecurityService
+public partial class SecurityService
     {
 
         private readonly HttpClient httpClient;

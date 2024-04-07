@@ -38,22 +38,11 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
 
         protected RadzenDataGrid<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> grid0;
 
-        protected string search = "";
-
         [Inject]
         protected SecurityService Security { get; set; }
-
-        protected async Task Search(ChangeEventArgs args)
-        {
-            search = $"{args.Value}";
-
-            await grid0.GoToPage(0);
-
-            votes = await CryptographicElectronicVotingSystemService.GetVotes(new Query { Filter = $@"i => i.VoteProof.Contains(@0)", FilterParameters = new object[] { search }, Expand = "Voter,Candidate" });
-        }
         protected override async Task OnInitializedAsync()
         {
-            votes = await CryptographicElectronicVotingSystemService.GetVotes(new Query { Filter = $@"i => i.VoteProof.Contains(@0)", FilterParameters = new object[] { search }, Expand = "Voter,Candidate" });
+            votes = await CryptographicElectronicVotingSystemService.GetVotes(new Query { Expand = "Voter" });
         }
 
         protected async Task AddButtonClick(MouseEventArgs args)
@@ -62,9 +51,9 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             await grid0.Reload();
         }
 
-        protected async Task EditRow(DataGridRowMouseEventArgs<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote> args)
+        protected async Task EditRow(CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote args)
         {
-            await DialogService.OpenAsync<EditVote>("Edit Vote", new Dictionary<string, object> { {"VoteID", args.Data.VoteID} });
+            await DialogService.OpenAsync<EditVote>("Edit Vote", new Dictionary<string, object> { {"VoteID", args.VoteID} });
         }
 
         protected async Task GridDeleteButtonClick(MouseEventArgs args, CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote vote)
@@ -89,31 +78,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
                     Summary = $"Error",
                     Detail = $"Unable to delete Vote"
                 });
-            }
-        }
-
-        protected async Task ExportClick(RadzenSplitButtonItem args)
-        {
-            if (args?.Value == "csv")
-            {
-                await CryptographicElectronicVotingSystemService.ExportVotesToCSV(new Query
-{
-    Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
-    OrderBy = $"{grid0.Query.OrderBy}",
-    Expand = "Voter,Candidate",
-    Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "Votes");
-            }
-
-            if (args == null || args.Value == "xlsx")
-            {
-                await CryptographicElectronicVotingSystemService.ExportVotesToExcel(new Query
-{
-    Filter = $@"{(string.IsNullOrEmpty(grid0.Query.Filter)? "true" : grid0.Query.Filter)}",
-    OrderBy = $"{grid0.Query.OrderBy}",
-    Expand = "Voter,Candidate",
-    Select = string.Join(",", grid0.ColumnsCollection.Where(c => c.GetVisible() && !string.IsNullOrEmpty(c.Property)).Select(c => c.Property.Contains(".") ? c.Property + " as " + c.Property.Replace(".", "") : c.Property))
-}, "Votes");
             }
         }
     }

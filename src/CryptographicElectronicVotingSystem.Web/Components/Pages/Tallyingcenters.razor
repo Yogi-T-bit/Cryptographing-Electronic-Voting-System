@@ -1,7 +1,6 @@
 @page "/tallyingcenters"
 
 @attribute [Authorize]
-
 <PageTitle>Tallyingcenters</PageTitle>
 <RadzenStack>
     <RadzenRow AlignItems="AlignItems.Center">
@@ -10,19 +9,14 @@
         </RadzenColumn>
         <RadzenColumn Size="12" SizeMD="6">
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
-                <RadzenSplitButton Icon="get_app" Text="Export" Click="@ExportClick" Variant="Variant.Flat" Shade="Shade.Lighter">
-                    <RadzenSplitButtonItem Text="Excel" Value="xlsx" />
-                    <RadzenSplitButtonItem Text="CSV" Value="csv" />
-                </RadzenSplitButton>
                 <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
             </RadzenStack>
         </RadzenColumn>
     </RadzenRow>
-    <RadzenTextBox Placeholder="Search ..." style="display: block; width: 100%" @oninput="@Search" aria-label="Search by all string columns" />
     <RadzenRow>
       <RadzenColumn SizeMD=12>
         <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
-            Data="@tallyingcenters" TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" RowDoubleClick="@EditRow">
+            Data="@tallyingcenters" TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" RowSelect="@EditRow">
             <Columns>
                 <RadzenDataGridColumn TItem="CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Tallyingcenter" Property="CenterID" Title="Center I D">
                 </RadzenDataGridColumn>

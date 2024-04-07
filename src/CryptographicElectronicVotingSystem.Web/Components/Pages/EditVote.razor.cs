@@ -41,15 +41,14 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             vote = await CryptographicElectronicVotingSystemService.GetVoteByVoteId(VoteID);
 
             votersForVoterID = await CryptographicElectronicVotingSystemService.GetVoters();
-
-            candidatesForCandidateID = await CryptographicElectronicVotingSystemService.GetCandidates();
         }
         protected bool errorVisible;
         protected CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Vote vote;
 
         protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Voter> votersForVoterID;
 
-        protected IEnumerable<CryptographicElectronicVotingSystem.Dal.Models.CryptographicElectronicVotingSystem.Candidate> candidatesForCandidateID;
+        [Inject]
+        protected SecurityService Security { get; set; }
 
         protected async Task FormSubmit()
         {
@@ -60,8 +59,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
             }
             catch (Exception ex)
             {
-                hasChanges = ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException;
-                canEdit = !(ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException);
                 errorVisible = true;
             }
         }
@@ -69,23 +66,6 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected async Task CancelButtonClick(MouseEventArgs args)
         {
             DialogService.Close(null);
-        }
-
-
-        protected bool hasChanges = false;
-        protected bool canEdit = true;
-
-        [Inject]
-        protected SecurityService Security { get; set; }
-
-
-        protected async Task ReloadButtonClick(MouseEventArgs args)
-        {
-           CryptographicElectronicVotingSystemService.Reset();
-            hasChanges = false;
-            canEdit = true;
-
-            vote = await CryptographicElectronicVotingSystemService.GetVoteByVoteId(VoteID);
         }
     }
 }

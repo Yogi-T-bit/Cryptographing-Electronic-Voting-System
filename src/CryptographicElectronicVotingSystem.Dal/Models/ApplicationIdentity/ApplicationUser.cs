@@ -35,11 +35,5 @@ namespace CryptographicElectronicVotingSystem.Dal.Models.ApplicationIdentity
         }
 
         public ICollection<ApplicationRole> Roles { get; set; }
-        
-        // Add a foreign key for Voter
-        public long VoterId { get; set; }
-
-        // Navigation property to Voter
-        public virtual Voter Voter { get; set; }
     }
 }

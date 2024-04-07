@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
+namespace CryptographicElectronicVotingSystem.Dal.Migrations
 {
     /// <inheritdoc />
-    public partial class VoterRelationship : Migration
+    public partial class AdjustApplicationUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,45 +36,26 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4")
                 .OldAnnotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.AddColumn<long>(
-                name: "VoterId",
+            migrationBuilder.AddColumn<string>(
+                name: "FirstName",
                 table: "AspNetUsers",
-                type: "bigint",
-                nullable: true);
-
-            migrationBuilder.CreateTable(
-                name: "voters",
-                columns: table => new
-                {
-                    VoterID = table.Column<long>(type: "bigint", nullable: false),
-                    FullName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsAuthorized = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    HasVoted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    VoterPublicKey = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ApplicationUserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_voters", x => x.VoterID);
-                    table.ForeignKey(
-                        name: "FK_voters_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
+                type: "longtext",
+                nullable: false)
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_VoterId",
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
                 table: "AspNetUsers",
-                column: "VoterId",
-                unique: true);
+                type: "longtext",
+                nullable: false)
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Picture",
+                table: "AspNetUsers",
+                type: "longtext",
+                nullable: false)
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -87,34 +68,11 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_voters_ApplicationUserId",
-                table: "voters",
-                column: "ApplicationUserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_voters_VoterId",
-                table: "AspNetUsers",
-                column: "VoterId",
-                principalTable: "voters",
-                principalColumn: "VoterID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_voters_VoterId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "voters");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_VoterId",
-                table: "AspNetUsers");
-
             migrationBuilder.DropIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers");
@@ -124,7 +82,15 @@ namespace CryptographicElectronicVotingSystem.Dal.Data.Migrations
                 table: "AspNetRoles");
 
             migrationBuilder.DropColumn(
-                name: "VoterId",
+                name: "FirstName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Picture",
                 table: "AspNetUsers");
 
             migrationBuilder.AlterColumn<string>(

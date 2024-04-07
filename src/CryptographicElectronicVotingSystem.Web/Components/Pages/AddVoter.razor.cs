@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CryptographicElectronicVotingSystem.Dal.Data;
 using CryptographicElectronicVotingSystem.Web.Services;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components;
@@ -32,6 +33,8 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
         protected NotificationService NotificationService { get; set; }
         [Inject]
         public CryptographicElectronicVotingSystemService CryptographicElectronicVotingSystemService { get; set; }
+        [Inject]
+        public FakeDataGenerator FakeDataGenerator { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -52,6 +55,38 @@ namespace CryptographicElectronicVotingSystem.Web.Components.Pages
                 hasChanges = ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException;
                 canEdit = !(ex is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException);
                 errorVisible = true;
+            }
+        }
+        
+        protected async Task GenerateVoters()
+        {
+            try
+            {
+                int numOfVoters = 1;
+                bool success = await FakeDataGenerator.GenerateVotersAsync(numOfVoters);
+
+                if (success)
+                {
+                    NotificationService.Notify(NotificationSeverity.Success, "Operation Successful", "Voters have been successfully generated.", 5000);
+                }
+                else
+                {
+                    throw new Exception("Failed to generate all voters.");
+                }
+
+                // Refresh or update UI components if necessary
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex)
+            {
+                // Log the error or handle it as required
+                Console.WriteLine($"An error occurred: {ex}");
+                
+                // Update UI to reflect the error
+                errorVisible = true;
+
+                // Notify user about the error
+                NotificationService.Notify(NotificationSeverity.Error, "Error", "There was an error during the operation. Please try again.", 7000);
             }
         }
 
