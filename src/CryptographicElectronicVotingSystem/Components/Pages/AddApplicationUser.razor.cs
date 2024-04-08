@@ -84,6 +84,40 @@ namespace CryptographicElectronicVotingSystem.Components.Pages
                 NotificationService.Notify(NotificationSeverity.Error, "Error", "There was an error during the operation. Please try again.", 7000);
             }
         }
+        
+        
+        // update users address
+        protected async Task UpdateUserAddress()
+        {
+            try
+            {
+                // Assuming `UpdateUserAddress` returns a boolean indicating success
+                bool success = await FakeDataGenerator.AddAddressesToUsersAsync();
+
+                if (success)
+                {
+                    NotificationService.Notify(NotificationSeverity.Success, "Operation Successful", "User addresses have been successfully updated.", 5000);
+                }
+                else
+                {
+                    throw new Exception("Failed to update user addresses.");
+                }
+
+                // Refresh or update UI components if necessary
+                await InvokeAsync(StateHasChanged);
+            }
+            catch (Exception ex)
+            {
+                // Log the error or handle it as required
+                Console.WriteLine($"An error occurred: {ex}");
+                
+                // Update UI to reflect the error
+                errorVisible = true;
+
+                // Notify user about the error
+                NotificationService.Notify(NotificationSeverity.Error, "Error", "There was an error during the operation. Please try again.", 7000);
+            }
+        }
 
         protected async Task FormSubmit(ApplicationUser user)
         {

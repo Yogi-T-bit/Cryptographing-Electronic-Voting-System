@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Bogus;
 using System.Collections.Generic;
+using Bogus.DataSets;
 using CryptographicElectronicVotingSystem.Models.CryptographicElectronicVotingSystem;
 using CryptographicElectronicVotingSystem.Models.ApplicationIdentity;
 using Microsoft.AspNetCore.Identity;
@@ -94,6 +95,52 @@ namespace CryptographicElectronicVotingSystem.Data
                     overallSuccess = false;
                 }
 
+            }
+
+            return overallSuccess;
+        }
+        
+        // add addresses to existing users
+        public async Task<bool> AddAddressesToUsersAsync()
+        {
+            var random = new Random();
+            bool overallSuccess = true;
+            var states = new List<string> { "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming" };
+
+            // Fetch existing users from the database
+            var users = await _applicationIdentityDbContext.Users.ToListAsync();
+            if (!users.Any())
+            {
+                Console.WriteLine("No users found in the database.");
+                return false; // Early exit if no users found
+            }
+
+            foreach (var user in users)
+            {
+                using var transaction = await _applicationIdentityDbContext.Database.BeginTransactionAsync();
+
+                try
+                {
+                    // random choice of state
+                    var state = states[random.Next(states.Count)];
+                    user.Address = state;
+
+                    // Update the user with the address
+                    var updateUserResult = await _userManager.UpdateAsync(user);
+                    if (!updateUserResult.Succeeded) throw new Exception($"Failed to update user {user.UserName}.");
+                    Console.WriteLine($"Address added to user {user.UserName} successfully.");
+                    
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    if (transaction != null && transaction.GetDbTransaction().Connection != null)
+                    {
+                        await transaction.RollbackAsync();
+                    }
+                    Console.WriteLine($"Error during address generation for user {user.UserName}: {ex.Message}");
+                    overallSuccess = false;
+                }
             }
 
             return overallSuccess;
@@ -196,11 +243,13 @@ namespace CryptographicElectronicVotingSystem.Data
                 using var transaction = await _cryptographicElectronicVotingSystemContext.Database.BeginTransactionAsync();
                 try
                 {
+                    // generate guid string
+                    var guid = Guid.NewGuid().ToString();
                     var tallyingCenter = new Tallyingcenter
                     {
                         Name = $"{state} Tallying Center",
                         Location = state,
-                        CenterPrivateKey = "" // Set based on your logic or leave empty as in your original code
+                        CenterPrivateKey = guid
                     };
 
                     await _cryptographicElectronicVotingSystemContext.Tallyingcenters.AddAsync(tallyingCenter);

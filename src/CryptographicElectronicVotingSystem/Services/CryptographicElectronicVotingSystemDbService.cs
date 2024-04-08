@@ -731,6 +731,15 @@ namespace CryptographicElectronicVotingSystem.Services
                 throw new Exception("Voter has already voted or invalid data.");
             }
             
+            // get tallying center location
+            var tallyingCenters = await GetTallyingcenters();
+            var userLocation = _securityService.User.Address;
+            
+            var tallyingCenter = tallyingCenters.FirstOrDefault(t => t.Location == userLocation);
+            
+            
+            
+            
             var protector = await GetProtectorForUser(_securityService.User);
             
             var timestamp = DateTime.UtcNow;
